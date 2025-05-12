@@ -37,8 +37,8 @@ public class UsersDAO {
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        ps.setInt(2, user.getUserid());
-        ps.setString(1, user.getName());
+        ps.setInt(1, user.getUserid());
+        ps.setString(2, user.getName());
         ps.setString(3, user.getPhoneNumber());
         
         ps.executeUpdate();
