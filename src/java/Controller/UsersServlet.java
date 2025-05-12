@@ -31,9 +31,23 @@ public class UsersServlet extends HttpServlet {
                          HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         try {
-            List<Users> list = new UsersDAO().getAll();
-            response.getWriter().write(gson.toJson(list));
-            System.out.println("Test: doGet: Done");
+            String idParam = request.getParameter("id");
+            if(idParam != null){
+                int id = Integer.parseInt(idParam);
+                Users user = new UsersDAO().getUserById(id);
+                if (user != null) {
+                    response.getWriter().write(gson.toJson(user));
+                }
+                else {
+                    response.setStatus(404);
+                    response.getWriter().write("{\"error\":\"User not found\"}");
+                }
+            }
+            else{
+                List<Users> list = new UsersDAO().getAll();
+                response.getWriter().write(gson.toJson(list));
+                System.out.println("Test: doGet: Done");
+            }
         
         } catch (Exception e) {
             response.setStatus(500);

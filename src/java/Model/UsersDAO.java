@@ -47,6 +47,31 @@ public class UsersDAO {
         conn.close();
     }
     
+    public Users getUserById(int userid) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM Users WHERE userid = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+       
+        ps.setInt(1, userid);
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            Users user = new Users(
+                    rs.getInt("userid"), 
+                    rs.getString("name"),
+                    rs.getString("phoneNumber"));
+            rs.close();
+            ps.close();
+            conn.close();
+            return user;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
+    }
+    
     //Viet them getNhanVien (Lay nhan vien theo ma)
     
 }
