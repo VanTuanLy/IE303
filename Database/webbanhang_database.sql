@@ -5,6 +5,7 @@ GO
 USE QLBHONLINE
 GO
 
+
 CREATE TABLE users (
 	id INT NOT NULL,
 	username VARCHAR(50) NOT NULL,
@@ -103,3 +104,20 @@ ADD CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES order_deta
 
 ALTER TABLE order_items 
 ADD CONSTRAINT fk_order_items_product FOREIGN KEY (product_id) REFERENCES product(id);
+
+-- Danh sách cột có thể cần đổi sang NVARCHAR
+ALTER TABLE users ALTER COLUMN username NVARCHAR(50);
+ALTER TABLE users ALTER COLUMN passwords NVARCHAR(50);
+ALTER TABLE users ALTER COLUMN user_address NVARCHAR(200);
+
+ALTER TABLE product ALTER COLUMN product_name NVARCHAR(200);
+ALTER TABLE product ALTER COLUMN pro_desc NVARCHAR(1000);
+ALTER TABLE product ALTER COLUMN category NVARCHAR(200);
+
+ALTER TABLE discount ALTER COLUMN dis_name NVARCHAR(200);
+ALTER TABLE discount ALTER COLUMN disc_desc NVARCHAR(1000);
+
+ALTER TABLE order_details
+ALTER COLUMN order_status NVARCHAR(255);
+
+
