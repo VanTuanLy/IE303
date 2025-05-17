@@ -71,6 +71,6 @@ public class UsersServlet extends HttpServlet {
             response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }
-
+    
 
 }
