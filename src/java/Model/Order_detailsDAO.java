@@ -1,0 +1,61 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Model;
+
+import ConnDB.DBConnection;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Vo Tien Trung
+ */
+public class Order_detailsDAO {
+     public List<Order_details> getAlloOrder_detailses() throws Exception {
+        List<Order_details> list = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM order_details";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Order_details(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    rs.getDouble("total"),
+                    rs.getString("order_status"),
+                    rs.getDate("created_at"),
+                    rs.getDate("modified_at")
+            ));
+        }
+
+        rs.close();
+        ps.close();
+        conn.close();
+        return list;
+    }
+
+        public void addOrder_details(Order_details ord) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "INSERT INTO order_details VALUES (?, ?, ?, ?, ?, ?)";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setInt(1, ord.getOrder_id());
+        ps.setInt(2, ord.getUser_id());
+        ps.setDouble(3, ord.getTotal());
+        ps.setString(4, ord.getStatus());
+        ps.setDate(5, (Date) ord.getCreate_at());
+        ps.setDate(6, (Date) ord.getModified_at());
+        
+        ps.executeUpdate();
+        
+        ps.close();
+        conn.close();
+    }
+}
