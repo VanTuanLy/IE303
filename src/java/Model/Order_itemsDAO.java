@@ -40,7 +40,7 @@ public class Order_itemsDAO {
         return list;
     }
 
-        public void addOrder_items(Order_items order_items) throws Exception {
+    public void addOrder_items(Order_items order_items) throws Exception {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO order_items VALUES (?, ?, ?, ?, ?, ?)";
         
@@ -57,5 +57,36 @@ public class Order_itemsDAO {
         
         ps.close();
         conn.close();
+    }
+    
+    public Order_items getOrder_itemsById(int id) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM order_items WHERE id = ?";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setInt(1, id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            Order_items order_items = new Order_items(
+                    rs.getInt("id"),
+                    rs.getInt("order_id"),
+                    rs.getInt("product_id"),
+                    rs.getInt("quantity"),
+                    rs.getDate("created_at"),
+                    rs.getDate("modified_at")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return order_items;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
     }
 }

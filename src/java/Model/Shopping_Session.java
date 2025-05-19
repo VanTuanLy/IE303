@@ -14,10 +14,10 @@ public class Shopping_Session {
     private int session_id;
     private int user_id;
     private double total;
-    private Date create_at;
-    private Date modified_at;
+    private String create_at;
+    private String modified_at;
 
-    public Shopping_Session(int session_id, int user_id, double total, Date create_at, Date modified_at) {
+    public Shopping_Session(int session_id, int user_id, double total, String create_at, String modified_at) {
         this.session_id = session_id;
         this.user_id = user_id;
         this.total = total;
@@ -49,19 +49,19 @@ public class Shopping_Session {
         this.total = total;
     }
 
-    public Date getCreate_at() {
+    public String getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(String create_at) {
         this.create_at = create_at;
     }
 
-    public Date getModified_at() {
+    public String getModified_at() {
         return modified_at;
     }
 
-    public void setModified_at(Date modified_at) {
+    public void setModified_at(String modified_at) {
         this.modified_at = modified_at;
     }
     

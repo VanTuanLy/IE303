@@ -17,7 +17,7 @@ import java.util.List;
  * @author Vo Tien Trung
  */
 public class ProductDAO {
-     public List<Product> getAllpProducts() throws Exception {
+    public List<Product> getAllpProducts() throws Exception {
         List<Product> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM product";
@@ -42,7 +42,7 @@ public class ProductDAO {
         return list;
     }
 
-        public void addProduct(Product product) throws Exception {
+    public void addProduct(Product product) throws Exception {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO product VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
@@ -61,5 +61,38 @@ public class ProductDAO {
         
         ps.close();
         conn.close();
+    }
+    
+    public Product getProductById(int id) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM product WHERE id = ?";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setInt(1, id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            Product product = new Product(
+                    rs.getInt("id"),
+                    rs.getString("product_name"),
+                    rs.getString("pro_desc"),
+                    rs.getString("category"),
+                    rs.getDouble("price"),
+                    rs.getInt("discount_id"),
+                    rs.getDate("created_at"),
+                    rs.getDate("modified_at")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return product;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
     }
 }

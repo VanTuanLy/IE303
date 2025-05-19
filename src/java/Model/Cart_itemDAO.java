@@ -17,7 +17,7 @@ import java.util.List;
  * @author Vo Tien Trung
  */
 public class Cart_itemDAO {
-        public List<Cart_item> getAllCart_items() throws Exception {
+    public List<Cart_item> getAllCart_items() throws Exception {
         List<Cart_item> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM cart_item";
@@ -40,7 +40,7 @@ public class Cart_itemDAO {
         return list;
     }
 
-        public void addCart_item(Cart_item item) throws Exception {
+    public void addCart_item(Cart_item item) throws Exception {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO cart_item VALUES (?, ?, ?, ?, ?, ?)";
         
@@ -57,5 +57,36 @@ public class Cart_itemDAO {
         
         ps.close();
         conn.close();
+    }
+    
+    public Cart_item getCart_itemById(int id) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM cart_item WHERE id = ?";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setInt(1, id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            Cart_item cart = new Cart_item(
+                    rs.getInt("id"),
+                    rs.getInt("sessions_id"),
+                    rs.getInt("product_id"),
+                    rs.getInt("quantity"),
+                    rs.getDate("created_at"),
+                    rs.getDate("modified_at")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return cart;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
     }
 }

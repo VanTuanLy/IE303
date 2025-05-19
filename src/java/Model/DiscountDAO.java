@@ -17,7 +17,7 @@ import java.util.List;
  * @author Vo Tien Trung
  */
 public class DiscountDAO {
-        public List<Discount> getAlldDiscounts() throws Exception {
+    public List<Discount> getAlldDiscounts() throws Exception {
         List<Discount> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM discount";
@@ -40,7 +40,7 @@ public class DiscountDAO {
         return list;
     }
 
-        public void addDiscount(Discount dis) throws Exception {
+    public void addDiscount(Discount dis) throws Exception {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO discount VALUES (?, ?, ?, ?, ?, ?)";
         
@@ -57,5 +57,36 @@ public class DiscountDAO {
         
         ps.close();
         conn.close();
+    }
+    
+    public Discount getDiscountById(int id) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM discount WHERE id = ?";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setInt(1, id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            Discount discount = new Discount(
+                    rs.getInt("id"),
+                    rs.getString("dis_name"),
+                    rs.getString("disc_desc"),
+                    rs.getDouble("discount_percent"),
+                    rs.getDate("created_at"),
+                    rs.getDate("modified_at")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return discount;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
     }
 }

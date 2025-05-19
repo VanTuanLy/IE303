@@ -17,7 +17,7 @@ import java.util.List;
  * @author Vo Tien Trung
  */
 public class Order_detailsDAO {
-     public List<Order_details> getAlloOrder_detailses() throws Exception {
+    public List<Order_details> getAlloOrder_detailses() throws Exception {
         List<Order_details> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM order_details";
@@ -26,7 +26,7 @@ public class Order_detailsDAO {
         while (rs.next()) {
             list.add(new Order_details(
                     rs.getInt("id"),
-                    rs.getInt("user_id"),
+                    rs.getInt("users_id"),
                     rs.getDouble("total"),
                     rs.getString("order_status"),
                     rs.getDate("created_at"),
@@ -40,7 +40,7 @@ public class Order_detailsDAO {
         return list;
     }
 
-        public void addOrder_details(Order_details ord) throws Exception {
+    public void addOrder_details(Order_details ord) throws Exception {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO order_details VALUES (?, ?, ?, ?, ?, ?)";
         
@@ -57,5 +57,36 @@ public class Order_detailsDAO {
         
         ps.close();
         conn.close();
+    }
+    
+    public Order_details getOrder_detailsById(int id) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM order_details WHERE id = ?";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setInt(1, id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            Order_details order_details = new Order_details(
+                    rs.getInt("id"),
+                    rs.getInt("users_id"),
+                    rs.getDouble("total"),
+                    rs.getString("order_status"),
+                    rs.getDate("created_at"),
+                    rs.getDate("modified_at")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return order_details;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
     }
 }
