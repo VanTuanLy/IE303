@@ -4,8 +4,8 @@
  */
 package Controller;
 
-import Model.Users;
-import Model.UsersDAO;
+import Model.User;
+import Model.UserDAO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,7 +34,7 @@ public class UsersServlet extends HttpServlet {
             String idParam = request.getParameter("id");
             if(idParam != null){
                 int id = Integer.parseInt(idParam);
-                Users user = new UsersDAO().getUserById(id);
+                User user = new UserDAO().getUserById(id);
                 if (user != null) {
                     response.getWriter().write(gson.toJson(user));
                 }
@@ -44,7 +44,7 @@ public class UsersServlet extends HttpServlet {
                 }
             }
             else{
-                List<Users> list = new UsersDAO().getAll();
+                List<User> list = new UserDAO().getAllUsers();
                 response.getWriter().write(gson.toJson(list));
                 System.out.println("Test: doGet: Done");
             }
@@ -61,8 +61,8 @@ public class UsersServlet extends HttpServlet {
                           HttpServletResponse response) throws IOException {
         
         try (BufferedReader reader = request.getReader()) {
-            Users user = gson.fromJson(reader, Users.class);
-            new UsersDAO().add(user);
+            User user = gson.fromJson(reader, User.class);
+            new UserDAO().addUser(user);
             response.setContentType("application/json");
             response.getWriter().write("{\"status\":\"success\"}");
         

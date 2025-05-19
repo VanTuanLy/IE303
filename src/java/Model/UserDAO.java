@@ -20,7 +20,7 @@ public class UserDAO {
     public List<User> getAllUsers() throws Exception {
         List<User> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM users";
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
@@ -40,13 +40,45 @@ public class UserDAO {
         conn.close();
         return list;
     }
-
-        public void addUser(User user) throws Exception {
+    
+    public User getUserById(int id) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "SELECT * FROM users WHERE id = ?";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
+        ps.setInt(1, id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            User user = new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("passwords"),
+                    rs.getString("user_address"),
+                    rs.getString("telephone"),
+                    rs.getDate("created_at"),
+                    rs.getDate("modified_at")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return user;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
+    }
+
+    public void addUser(User user) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+
         ps.setInt(1, user.getUser_id());
         ps.setString(2, user.getUsername());
         ps.setString(3, user.getPassword());
@@ -54,9 +86,9 @@ public class UserDAO {
         ps.setString(5, user.getTelephone());
         ps.setDate(6, (Date) user.getCreate_at());
         ps.setDate(7, (Date) user.getModified_at());
-        
+
         ps.executeUpdate();
-        
+
         ps.close();
         conn.close();
     }
