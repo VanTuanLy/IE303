@@ -122,4 +122,17 @@ public class Shopping_SessionDAO {
         }
         return -1;
     }
+    
+        public List<Shopping_Session> sortSessionbyID() throws  Exception{
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM user shopping_session BY id ASC";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        
+        
+        ps.close();
+        conn.close();
+        return getAllSessions();
+    }
 }

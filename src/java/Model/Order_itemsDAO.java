@@ -126,4 +126,17 @@ public class Order_itemsDAO {
         }
         return -1;
     }
+    
+    public List<Order_items> sortOrder_itemsesbyID() throws  Exception{
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM order_items ORDER BY id ASC";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        
+        
+        ps.close();
+        conn.close();
+        return getAllOrder_items();
+    }    
 }

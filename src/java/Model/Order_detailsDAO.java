@@ -17,7 +17,7 @@ import java.util.List;
  * @author Vo Tien Trung
  */
 public class Order_detailsDAO {
-    public List<Order_details> getAlloOrder_detailses() throws Exception {
+    public List<Order_details> getAllOrder_detailses() throws Exception {
         List<Order_details> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM order_details";
@@ -126,5 +126,17 @@ public class Order_detailsDAO {
             e.printStackTrace();
         }
         return -1;
+    }
+    
+    public List<Order_details> sortOrder_detailsesbyID() throws  Exception{
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM order_details ORDER BY id ASC";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        
+        
+        ps.close();
+        conn.close();
+        return getAllOrder_detailses();
     }
 }

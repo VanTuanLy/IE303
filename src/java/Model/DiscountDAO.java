@@ -126,4 +126,16 @@ public class DiscountDAO {
         }
         return -1;
     }
+    
+    public List<Discount> sortDiscountbyID() throws  Exception{
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM discount ORDER BY id ASC";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        
+        
+        ps.close();
+        conn.close();
+        return getAlldDiscounts();
+    }    
 }

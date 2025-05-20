@@ -134,4 +134,17 @@ public class ProductDAO {
         }
         return -1;
     }
+
+    public List<Product> sortProductbyID() throws  Exception{
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM product ORDER BY id ASC";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        
+        
+        ps.close();
+        conn.close();
+        return getAllpProducts();
+    }    
 }

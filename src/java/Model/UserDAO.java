@@ -131,5 +131,16 @@ public class UserDAO {
         return -1;
     }
     
+    public List<User> sortUserbyID() throws  Exception{
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM user ORDER BY id ASC";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        
+        
+        ps.close();
+        conn.close();
+        return getAllUsers();
+    }
 }
 

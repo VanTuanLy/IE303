@@ -126,4 +126,16 @@ public class Cart_itemDAO {
         }
         return -1;
     }
+    
+    public List<Cart_item> sortcCart_itemsbyID() throws  Exception{
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM cart_item ORDER BY id ASC";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        
+        
+        ps.close();
+        conn.close();
+        return getAllCart_items();
+    }    
 }
