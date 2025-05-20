@@ -89,4 +89,41 @@ public class Cart_itemDAO {
         conn.close();
         return null;
     }
+    
+        public int deleteCart_itemId(int id) throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "DELETE FROM cart_item where id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ps.close();
+            conn.close();
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int updateCart_item(Cart_item item)throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "update user set id=?, sessions_id=?, product_id=?, quantity=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setInt(1, item.getItem_id());
+            ps.setInt(2, item.getSessions_id());
+            ps.setInt(3, item.getProduct_id());
+            ps.setInt(4, item.getQuantity());
+            ps.setDate(5, (Date) item.getCreate_at());
+            ps.setDate(6, (Date) item.getModified_at());
+            
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

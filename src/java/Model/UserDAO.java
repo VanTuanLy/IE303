@@ -92,4 +92,44 @@ public class UserDAO {
         ps.close();
         conn.close();
     }
+    
+    public int deleteUserId(int id) throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "DELETE FROM user where id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ps.close();
+            conn.close();
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int updateUser(User user)throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "update user set id=?, username=?, passwords=?, user_address=?, telephone=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setInt(1, user.getUser_id());
+            ps.setString(2, user.getUsername());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getAddress());
+            ps.setString(5, user.getTelephone());
+            ps.setDate(6, (Date) user.getCreate_at());
+            ps.setDate(7, (Date) user.getModified_at());
+            
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
 }
+

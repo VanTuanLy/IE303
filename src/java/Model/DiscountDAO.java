@@ -89,4 +89,41 @@ public class DiscountDAO {
         conn.close();
         return null;
     }
+    
+        public int deleteDiscountId(int id) throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "DELETE FROM discount where id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ps.close();
+            conn.close();
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int updateDiscount(Discount dis)throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "update user set id=?, dis_name=?, disc_desc=?, discount_percent=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setInt(1, dis.getDiscount_id());
+            ps.setString(2, dis.getDisc_name());
+            ps.setString(3, dis.getDisc_desc());
+            ps.setDouble(4, dis.getDiscount_percent());
+            ps.setDate(5, (Date) dis.getCreate_at());
+            ps.setDate(6, (Date) dis.getModified_at());
+            
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

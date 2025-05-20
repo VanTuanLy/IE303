@@ -89,4 +89,42 @@ public class Order_detailsDAO {
         conn.close();
         return null;
     }
+    
+    
+        public int deleteOrder_detailsId(int id) throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "DELETE FROM order_details where id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ps.close();
+            conn.close();
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int updateOrder_details(Order_details ord)throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "update user set id=?, users_id=?, total=?, order_status=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setInt(1, ord.getOrder_id());
+            ps.setInt(2, ord.getUser_id());
+            ps.setDouble(3, ord.getTotal());
+            ps.setString(4, ord.getStatus());
+            ps.setDate(5, (Date) ord.getCreate_at());
+            ps.setDate(6, (Date) ord.getModified_at());
+            
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

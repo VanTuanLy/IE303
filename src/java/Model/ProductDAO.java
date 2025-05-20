@@ -95,4 +95,43 @@ public class ProductDAO {
         conn.close();
         return null;
     }
+    
+        public int deleteProductId(int id) throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "DELETE FROM product where id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ps.close();
+            conn.close();
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int updateProduct(Product product) throws  Exception{
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "update user set id=?, product_name=?, pro_desc=?, category=?, price=?, discount_id=?,created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setInt(1, product.getProduct_id());
+            ps.setString(2, product.getProduct_name());
+            ps.setString(3, product.getProduct_desc());
+            ps.setString(4, product.getCatogry());
+            ps.setDouble(5, product.getPrice());
+            ps.setInt(6, product.getDiscount_id());
+            ps.setDate(7, (Date) product.getCreate_at());
+            ps.setDate(8, (Date) product.getModified_at());
+            
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }
