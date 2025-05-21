@@ -34,9 +34,9 @@ public class Order_itemsServlet extends HttpServlet {
             String idParam = request.getParameter("id");
             if(idParam != null){
                 int id = Integer.parseInt(idParam);
-                Order_items user = new Order_itemsDAO().getOrder_itemsById(id);
-                if (user != null) {
-                    response.getWriter().write(gson.toJson(user));
+                Order_items order_items = new Order_itemsDAO().getOrder_itemsById(id);
+                if (order_items != null) {
+                    response.getWriter().write(gson.toJson(order_items));
                 }
                 else {
                     response.setStatus(404);
@@ -68,6 +68,55 @@ public class Order_itemsServlet extends HttpServlet {
         
         } catch (Exception e) {
             response.setStatus(500);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+    
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        try (BufferedReader reader = request.getReader()) {
+            Order_items order_items = gson.fromJson(reader, Order_items.class);
+            int result = new Order_itemsDAO().updateOrderItem(order_items);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"Order_items updated successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"message\":\"Update failed. Order_items not found or data unchanged.\"}");
+            }
+        
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+    
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        
+        String idParam = request.getParameter("id");
+        if (idParam == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Thiếu tham số id\"}");
+            return;
+        }
+        
+        try{
+            int id = Integer.parseInt(idParam);
+            int result = new Order_itemsDAO().deleteOrderItemId(id);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"Xóa Order_items thành công\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"error\":\"Không tìm thấy Order_items để xóa\"}");
+            }
+        } catch(Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }

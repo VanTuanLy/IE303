@@ -71,6 +71,58 @@ public class UsersServlet extends HttpServlet {
             response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        try (BufferedReader reader = request.getReader()) {
+            User user = gson.fromJson(reader, User.class);
+            int result = new UserDAO().updateUser(user);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"User updated successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"message\":\"Update failed. User not found or data unchanged.\"}");
+            }
+        
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        
+        String idParam = request.getParameter("id");
+        if (idParam == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Thiếu tham số id\"}");
+            return;
+        }
+        
+        try{
+            int id = Integer.parseInt(idParam);
+            int result = new UserDAO().deleteUserId(id);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"Xóa user thành công\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"error\":\"Không tìm thấy user để xóa\"}");
+            }
+        } catch(Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+    
+    
+    
     
 
 }

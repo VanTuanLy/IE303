@@ -4,7 +4,6 @@
  */
 package Model;
 
-import java.util.Date;
 
 /**
  *
@@ -15,10 +14,10 @@ public class Order_details {
     private int user_id;
     private double total;
     private String status;
-    private Date create_at;
-    private Date modified_at;
+    private String create_at;
+    private String modified_at;
 
-    public Order_details(int order_id, int user_id, double total, String status, Date create_at, Date modified_at) {
+    public Order_details(int order_id, int user_id, double total, String status, String create_at, String modified_at) {
         this.order_id = order_id;
         this.user_id = user_id;
         this.total = total;
@@ -35,11 +34,11 @@ public class Order_details {
         this.order_id = order_id;
     }
 
-    public Date getModified_at() {
+    public String getModified_at() {
         return modified_at;
     }
 
-    public void setModified_at(Date modified_at) {
+    public void setModified_at(String modified_at) {
         this.modified_at = modified_at;
     }
 
@@ -59,11 +58,11 @@ public class Order_details {
         this.status = status;
     }
 
-    public Date getCreate_at() {
+    public String getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(String create_at) {
         this.create_at = create_at;
     }
 

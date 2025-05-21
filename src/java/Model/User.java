@@ -4,8 +4,6 @@
  */
 package Model;
 
-import java.util.Date;
-
 /**
  *
  * @author Vo Tien Trung
@@ -16,10 +14,10 @@ public class User {
     private String password;
     private String address;
     private String telephone;
-    private Date create_at;
-    private Date modified_at;
+    private String create_at;
+    private String modified_at;
 
-    public User(int user_id, String username, String password, String address, String telephone, Date create_at, Date modified_at) {
+    public User(int user_id, String username, String password, String address, String telephone, String create_at, String modified_at) {
         this.user_id = user_id;
         this.username = username;
         this.password = password;
@@ -69,19 +67,19 @@ public class User {
         this.telephone = telephone;
     }
 
-    public Date getCreate_at() {
+    public String getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(String create_at) {
         this.create_at = create_at;
     }
 
-    public Date getModified_at() {
+    public String getModified_at() {
         return modified_at;
     }
 
-    public void setModified_at(Date modified_at) {
+    public void setModified_at(String modified_at) {
         this.modified_at = modified_at;
     }
     

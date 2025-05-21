@@ -34,9 +34,9 @@ public class Order_detailsServlet extends HttpServlet {
             String idParam = request.getParameter("id");
             if(idParam != null){
                 int id = Integer.parseInt(idParam);
-                Order_details user = new Order_detailsDAO().getOrder_detailsById(id);
-                if (user != null) {
-                    response.getWriter().write(gson.toJson(user));
+                Order_details order_details = new Order_detailsDAO().getOrder_detailsById(id);
+                if (order_details != null) {
+                    response.getWriter().write(gson.toJson(order_details));
                 }
                 else {
                     response.setStatus(404);
@@ -44,7 +44,7 @@ public class Order_detailsServlet extends HttpServlet {
                 }
             }
             else{
-                List<Order_details> list = new Order_detailsDAO().getAlloOrder_detailses();
+                List<Order_details> list = new Order_detailsDAO().getAllOrder_detailses();
                 response.getWriter().write(gson.toJson(list));
                 System.out.println("Test: doGet: Done");
             }
@@ -72,5 +72,52 @@ public class Order_detailsServlet extends HttpServlet {
         }
     }
     
-
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        try (BufferedReader reader = request.getReader()) {
+            Order_details order_details = gson.fromJson(reader, Order_details.class);
+            int result = new Order_detailsDAO().updateOrder_details(order_details);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"Order_details updated successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"message\":\"Update failed. Order_details not found or data unchanged.\"}");
+            }
+        
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+    
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        
+        String idParam = request.getParameter("id");
+        if (idParam == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Thiếu tham số id\"}");
+            return;
+        }
+        
+        try{
+            int id = Integer.parseInt(idParam);
+            int result = new Order_detailsDAO().deleteOrder_detailsId(id);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"Xóa Order_details thành công\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"error\":\"Không tìm thấy Order_details để xóa\"}");
+            }
+        } catch(Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
 }

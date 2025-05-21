@@ -4,7 +4,6 @@
  */
 package Model;
 
-import java.util.Date;
 
 /**
  *
@@ -15,10 +14,10 @@ public class Discount {
     private String disc_name;
     private String disc_desc;
     private double discount_percent;
-    private Date create_at;
-    private Date modified_at;
+    private String create_at;
+    private String modified_at;
 
-    public Discount(int id, String disc_name, String disc_desc, double discount_percent, Date create_at, Date modified_at) {
+    public Discount(int id, String disc_name, String disc_desc, double discount_percent, String create_at, String modified_at) {
         this.discount_id = id;
         this.disc_name = disc_name;
         this.disc_desc = disc_desc;
@@ -59,19 +58,19 @@ public class Discount {
         this.discount_percent = discount_percent;
     }
 
-    public Date getCreate_at() {
+    public String getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(String create_at) {
         this.create_at = create_at;
     }
 
-    public Date getModified_at() {
+    public String getModified_at() {
         return modified_at;
     }
 
-    public void setModified_at(Date modified_at) {
+    public void setModified_at(String modified_at) {
         this.modified_at = modified_at;
     }
     

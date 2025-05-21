@@ -6,7 +6,6 @@ package Model;
 
 import ConnDB.DBConnection;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ public class Order_itemsDAO {
                     rs.getInt("order_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             ));
         }
 
@@ -50,8 +49,8 @@ public class Order_itemsDAO {
         ps.setInt(2, order_items.getOrder_id());
         ps.setInt(3, order_items.getProduct_id());
         ps.setInt(4, order_items.getQuantity());
-        ps.setDate(5, (Date) order_items.getCreate_at());
-        ps.setDate(6, (Date) order_items.getModified_at());
+        ps.setString(5, order_items.getCreate_at());
+        ps.setString(6, order_items.getModified_at());
         
         ps.executeUpdate();
         
@@ -75,8 +74,8 @@ public class Order_itemsDAO {
                     rs.getInt("order_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             );
             rs.close();
             ps.close();
@@ -90,41 +89,48 @@ public class Order_itemsDAO {
         return null;
     }
     
-        public int deleteOrderItemId(int id) throws  Exception{
+    public int deleteOrderItemId(int id) throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
             String sql = "DELETE FROM order_items where id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
+            rowCount = ps.executeUpdate();
             ps.close();
             conn.close();
-            return ps.executeUpdate();
+            
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public int updateOrderItem(Order_items order_items)throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update user set id=?, order_id=?, product_id=?, quantity=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            String sql = "update order_items set order_id=?, product_id=?, quantity=?, created_at=?, modified_at=? where id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
-            ps.setInt(1, order_items.getOrder_itemsid());
-            ps.setInt(2, order_items.getOrder_id());
-            ps.setInt(3, order_items.getProduct_id());
-            ps.setInt(4, order_items.getQuantity());
-            ps.setDate(5, (Date) order_items.getCreate_at());
-            ps.setDate(6, (Date) order_items.getModified_at());
+            ps.setInt(1, order_items.getOrder_id());
+            ps.setInt(2, order_items.getProduct_id());
+            ps.setInt(3, order_items.getQuantity());
+            ps.setString(4, order_items.getCreate_at());
+            ps.setString(5, order_items.getModified_at());
+            ps.setInt(6, order_items.getOrder_itemsid());
+            
+            rowCount = ps.executeUpdate();
             
             ps.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public List<Order_items> sortOrder_itemsesbyID() throws  Exception{

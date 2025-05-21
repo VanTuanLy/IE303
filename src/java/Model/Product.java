@@ -4,8 +4,6 @@
  */
 package Model;
 
-import java.util.Date;
-
 /**
  *
  * @author Vo Tien Trung
@@ -17,11 +15,11 @@ public class Product {
     private String catogry;
     private double price;
     private int discount_id;
-    private Date create_at;
-    private Date modified_at;
+    private String create_at;
+    private String modified_at;
     
 
-    public Product(int id, String product_name, String product_desc, String catogry, double price, int discount_id, Date create_at, Date modified_at) {
+    public Product(int id, String product_name, String product_desc, String catogry, double price, int discount_id, String create_at, String modified_at) {
         this.product_id = id;
         this.product_name = product_name;
         this.product_desc = product_desc;
@@ -79,19 +77,19 @@ public class Product {
         this.discount_id = discount_id;
     }
 
-    public Date getCreate_at() {
+    public String getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(String create_at) {
         this.create_at = create_at;
     }
 
-    public Date getModified_at() {
+    public String getModified_at() {
         return modified_at;
     }
 
-    public void setModified_at(Date modified_at) {
+    public void setModified_at(String modified_at) {
         this.modified_at = modified_at;
     }
     

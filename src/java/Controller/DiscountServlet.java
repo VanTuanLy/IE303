@@ -34,9 +34,9 @@ public class DiscountServlet extends HttpServlet {
             String idParam = request.getParameter("id");
             if(idParam != null){
                 int id = Integer.parseInt(idParam);
-                Discount user = new DiscountDAO().getDiscountById(id);
-                if (user != null) {
-                    response.getWriter().write(gson.toJson(user));
+                Discount discount = new DiscountDAO().getDiscountById(id);
+                if (discount != null) {
+                    response.getWriter().write(gson.toJson(discount));
                 }
                 else {
                     response.setStatus(404);
@@ -68,6 +68,55 @@ public class DiscountServlet extends HttpServlet {
         
         } catch (Exception e) {
             response.setStatus(500);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+    
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        try (BufferedReader reader = request.getReader()) {
+            Discount discount = gson.fromJson(reader, Discount.class);
+            int result = new DiscountDAO().updateDiscount(discount);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"Discount updated successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"message\":\"Update failed. Discount not found or data unchanged.\"}");
+            }
+        
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+    
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        request.setCharacterEncoding("UTF-8");
+        
+        String idParam = request.getParameter("id");
+        if (idParam == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Thiếu tham số id\"}");
+            return;
+        }
+        
+        try{
+            int id = Integer.parseInt(idParam);
+            int result = new DiscountDAO().deleteDiscountId(id);
+            if (result > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("{\"message\":\"Xóa Discount thành công\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"error\":\"Không tìm thấy Discount để xóa\"}");
+            }
+        } catch(Exception e){
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
         }
     }

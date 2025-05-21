@@ -6,7 +6,6 @@ package Model;
 
 import ConnDB.DBConnection;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -30,8 +29,8 @@ public class UserDAO {
                     rs.getString("passwords"),
                     rs.getString("user_address"),
                     rs.getString("telephone"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             ));
         }
 
@@ -58,8 +57,8 @@ public class UserDAO {
                     rs.getString("passwords"),
                     rs.getString("user_address"),
                     rs.getString("telephone"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             );
             rs.close();
             ps.close();
@@ -75,7 +74,7 @@ public class UserDAO {
 
     public void addUser(User user) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -84,8 +83,8 @@ public class UserDAO {
         ps.setString(3, user.getPassword());
         ps.setString(4, user.getAddress());
         ps.setString(5, user.getTelephone());
-        ps.setDate(6, (Date) user.getCreate_at());
-        ps.setDate(7, (Date) user.getModified_at());
+        ps.setString(6, user.getCreate_at());
+        ps.setString(7, user.getModified_at());
 
         ps.executeUpdate();
 
@@ -94,41 +93,48 @@ public class UserDAO {
     }
     
     public int deleteUserId(int id) throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "DELETE FROM user where id = ?";
+            String sql = "DELETE FROM users where id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
+            rowCount = ps.executeUpdate();
             ps.close();
             conn.close();
-            return ps.executeUpdate();
+       
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public int updateUser(User user)throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update user set id=?, username=?, passwords=?, user_address=?, telephone=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            String sql = "update users set username=?, passwords=?, user_address=?, telephone=?, created_at=?, modified_at=? where id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
-            ps.setInt(1, user.getUser_id());
-            ps.setString(2, user.getUsername());
-            ps.setString(3, user.getPassword());
-            ps.setString(4, user.getAddress());
-            ps.setString(5, user.getTelephone());
-            ps.setDate(6, (Date) user.getCreate_at());
-            ps.setDate(7, (Date) user.getModified_at());
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getAddress());
+            ps.setString(4, user.getTelephone());
+            ps.setString(5, user.getCreate_at());
+            ps.setString(6, user.getModified_at());
+            ps.setInt(7, user.getUser_id());
+            
+            rowCount = ps.executeUpdate();
             
             ps.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public List<User> sortUserbyID() throws  Exception{

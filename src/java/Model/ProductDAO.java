@@ -6,7 +6,6 @@ package Model;
 
 import ConnDB.DBConnection;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -31,8 +30,8 @@ public class ProductDAO {
                     rs.getString("category"),
                     rs.getDouble("price"),
                     rs.getInt("discount_id"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             ));
         }
 
@@ -54,8 +53,8 @@ public class ProductDAO {
         ps.setString(4, product.getCatogry());
         ps.setDouble(5, product.getPrice());
         ps.setInt(6, product.getDiscount_id());
-        ps.setDate(7, (Date) product.getCreate_at());
-        ps.setDate(8, (Date) product.getModified_at());
+        ps.setString(7, (String) product.getCreate_at());
+        ps.setString(8, (String) product.getModified_at());
         
         ps.executeUpdate();
         
@@ -81,8 +80,8 @@ public class ProductDAO {
                     rs.getString("category"),
                     rs.getDouble("price"),
                     rs.getInt("discount_id"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             );
             rs.close();
             ps.close();
@@ -96,43 +95,49 @@ public class ProductDAO {
         return null;
     }
     
-        public int deleteProductId(int id) throws  Exception{
+    public int deleteProductId(int id) throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
             String sql = "DELETE FROM product where id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
+            rowCount = ps.executeUpdate();
             ps.close();
             conn.close();
-            return ps.executeUpdate();
+            
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public int updateProduct(Product product) throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update user set id=?, product_name=?, pro_desc=?, category=?, price=?, discount_id=?,created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            String sql = "update product set product_name=?, pro_desc=?, category=?, price=?, discount_id=?,created_at=?, modified_at=? where id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
-            ps.setInt(1, product.getProduct_id());
-            ps.setString(2, product.getProduct_name());
-            ps.setString(3, product.getProduct_desc());
-            ps.setString(4, product.getCatogry());
-            ps.setDouble(5, product.getPrice());
-            ps.setInt(6, product.getDiscount_id());
-            ps.setDate(7, (Date) product.getCreate_at());
-            ps.setDate(8, (Date) product.getModified_at());
+            ps.setString(1, product.getProduct_name());
+            ps.setString(2, product.getProduct_desc());
+            ps.setString(3, product.getCatogry());
+            ps.setDouble(4, product.getPrice());
+            ps.setInt(5, product.getDiscount_id());
+            ps.setString(6, product.getCreate_at());
+            ps.setString(7, product.getModified_at());
+            ps.setInt(8, product.getProduct_id());
+            
+            rowCount = ps.executeUpdate();
             
             ps.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+        return rowCount;
     }
 
     public List<Product> sortProductbyID() throws  Exception{

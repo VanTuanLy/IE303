@@ -6,7 +6,6 @@ package Model;
 
 import ConnDB.DBConnection;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -87,43 +86,48 @@ public class Shopping_SessionDAO {
         return null;
     }
     
-        public int deleteSessionId(int id) throws  Exception{
+    public int deleteSessionId(int id) throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
             String sql = "DELETE FROM shopping_session where id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
+            rowCount = ps.executeUpdate();
             ps.close();
             conn.close();
-            return ps.executeUpdate();
+            
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public int updateSession(Shopping_Session session) throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update shopping_session set id=?, users_id=?, total=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            String sql = "update shopping_session set users_id=?, total=?, created_at=?, modified_at=? where id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
-            ps.setInt(1, session.getSession_id());
-            ps.setInt(2, session.getUser_id());
-            ps.setDouble(3, session.getTotal());
-            ps.setString(4, session.getCreate_at());
-            ps.setString(5, session.getModified_at());
+            ps.setInt(1, session.getUser_id());
+            ps.setDouble(2, session.getTotal());
+            ps.setString(3, session.getCreate_at());
+            ps.setString(4, session.getModified_at());
+            ps.setInt(5, session.getSession_id());
             
+            rowCount = ps.executeUpdate();
             ps.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+        return rowCount;
     }
     
-        public List<Shopping_Session> sortSessionbyID() throws  Exception{
+    public List<Shopping_Session> sortSessionbyID() throws  Exception{
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM user shopping_session BY id ASC";
 

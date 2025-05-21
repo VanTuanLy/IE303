@@ -6,7 +6,6 @@ package Model;
 
 import ConnDB.DBConnection;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ public class DiscountDAO {
                     rs.getString("dis_name"),
                     rs.getString("disc_desc"),
                     rs.getDouble("discount_percent"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             ));
         }
 
@@ -50,8 +49,8 @@ public class DiscountDAO {
         ps.setString(2, dis.getDisc_name());
         ps.setString(3, dis.getDisc_desc());
         ps.setDouble(4, dis.getDiscount_percent());
-        ps.setDate(5, (Date) dis.getCreate_at());
-        ps.setDate(6, (Date) dis.getModified_at());
+        ps.setString(5, dis.getCreate_at());
+        ps.setString(6, dis.getModified_at());
         
         ps.executeUpdate();
         
@@ -75,8 +74,8 @@ public class DiscountDAO {
                     rs.getString("dis_name"),
                     rs.getString("disc_desc"),
                     rs.getDouble("discount_percent"),
-                    rs.getDate("created_at"),
-                    rs.getDate("modified_at")
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
             );
             rs.close();
             ps.close();
@@ -90,41 +89,47 @@ public class DiscountDAO {
         return null;
     }
     
-        public int deleteDiscountId(int id) throws  Exception{
+    public int deleteDiscountId(int id) throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
             String sql = "DELETE FROM discount where id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
+            rowCount = ps.executeUpdate();
             ps.close();
             conn.close();
-            return ps.executeUpdate();
+            
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public int updateDiscount(Discount dis)throws  Exception{
+        int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update user set id=?, dis_name=?, disc_desc=?, discount_percent=?, created_at=CONVERT(DATE,?,103), modified_at=CONVERT(DATE,?,103)";
+            String sql = "update discount set dis_name=?, disc_desc=?, discount_percent=?, created_at=?, modified_at=? where id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
-            ps.setInt(1, dis.getDiscount_id());
-            ps.setString(2, dis.getDisc_name());
-            ps.setString(3, dis.getDisc_desc());
-            ps.setDouble(4, dis.getDiscount_percent());
-            ps.setDate(5, (Date) dis.getCreate_at());
-            ps.setDate(6, (Date) dis.getModified_at());
+            ps.setString(1, dis.getDisc_name());
+            ps.setString(2, dis.getDisc_desc());
+            ps.setDouble(3, dis.getDiscount_percent());
+            ps.setString(4, dis.getCreate_at());
+            ps.setString(5, dis.getModified_at());
+            ps.setInt(6, dis.getDiscount_id());
             
+            rowCount = ps.executeUpdate();
             ps.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
-        return -1;
+        return rowCount;
     }
     
     public List<Discount> sortDiscountbyID() throws  Exception{

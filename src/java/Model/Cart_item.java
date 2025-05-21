@@ -4,9 +4,6 @@
  */
 package Model;
 
-import java.net.IDN;
-import java.util.Date;
-
 /**
  *
  * @author Vo Tien Trung
@@ -16,10 +13,10 @@ public class Cart_item {
     private int sessions_id;
     private int product_id;
     private int quantity;
-    private Date create_at;
-    private Date modified_at;
+    private String create_at;
+    private String modified_at;
 
-    public Cart_item(int item_id, int sessions_id, int product_id, int quantity, Date create_at, Date modified_at) {
+    public Cart_item(int item_id, int sessions_id, int product_id, int quantity, String create_at, String modified_at) {
         this.item_id = item_id;
         this.sessions_id = sessions_id;
         this.product_id = product_id;
@@ -60,19 +57,19 @@ public class Cart_item {
         this.quantity = quantity;
     }
 
-    public Date getCreate_at() {
+    public String getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(String create_at) {
         this.create_at = create_at;
     }
 
-    public Date getModified_at() {
+    public String getModified_at() {
         return modified_at;
     }
 
-    public void setModified_at(Date modified_at) {
+    public void setModified_at(String modified_at) {
         this.modified_at = modified_at;
     }
     
