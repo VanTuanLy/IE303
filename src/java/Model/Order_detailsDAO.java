@@ -134,14 +134,26 @@ public class Order_detailsDAO {
     }
     
     public List<Order_details> sortOrder_detailsesbyID() throws  Exception{
+        List<Order_details> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM order_details ORDER BY id ASC";
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        
-        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Order_details(
+                    rs.getInt("id"),
+                    rs.getInt("users_id"),
+                    rs.getDouble("total"),
+                    rs.getString("order_status"),
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
+            ));
+        }
+
+        rs.close();
         ps.close();
         conn.close();
-        return getAllOrder_detailses();
+        return list;
     }
 }

@@ -138,15 +138,28 @@ public class UserDAO {
     }
     
     public List<User> sortUserbyID() throws  Exception{
+         List<User> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM user ORDER BY id ASC";
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        
-        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("passwords"),
+                    rs.getString("user_address"),
+                    rs.getString("telephone"),
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
+            ));
+        }
+
+        rs.close();
         ps.close();
         conn.close();
-        return getAllUsers();
+        return list;
     }
 }
 

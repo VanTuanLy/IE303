@@ -133,14 +133,26 @@ public class DiscountDAO {
     }
     
     public List<Discount> sortDiscountbyID() throws  Exception{
+        List<Discount> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM discount ORDER BY id ASC";
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        
-        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Discount(
+                    rs.getInt("id"),
+                    rs.getString("dis_name"),
+                    rs.getString("disc_desc"),
+                    rs.getDouble("discount_percent"),
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
+            ));
+        }
+
+        rs.close();
         ps.close();
         conn.close();
-        return getAlldDiscounts();
+        return list;
     }    
 }

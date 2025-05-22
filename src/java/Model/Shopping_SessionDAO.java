@@ -128,15 +128,26 @@ public class Shopping_SessionDAO {
     }
     
     public List<Shopping_Session> sortSessionbyID() throws  Exception{
+         List<Shopping_Session> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM user shopping_session BY id ASC";
 
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        
-        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Shopping_Session(
+                    rs.getInt("id"),
+                    rs.getInt("users_id"),
+                    rs.getDouble("total"),
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
+            ));
+        }
+
+        rs.close();
         ps.close();
         conn.close();
-        return getAllSessions();
+        return list;
     }
 }

@@ -133,14 +133,27 @@ public class Cart_itemDAO {
     }
     
     public List<Cart_item> sortcCart_itemsbyID() throws  Exception{
+        List<Cart_item> list = new ArrayList<>();
+
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM cart_item ORDER BY id ASC";
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        
-        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Cart_item(
+                    rs.getInt("id"),
+                    rs.getInt("sessions_id"),
+                    rs.getInt("product_id"),
+                    rs.getInt("quantity"),
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
+            ));
+        }
+
+        rs.close();
         ps.close();
         conn.close();
-        return getAllCart_items();
+        return list;
     }    
 }
