@@ -44,8 +44,17 @@ public class ProductServlet extends HttpServlet {
                 }
             }
             else{
-                List<Product> list = new ProductDAO().getAllpProducts();
-                response.getWriter().write(gson.toJson(list));
+                String sortBy = request.getParameter("sortBy");
+                String order = request.getParameter("order"); 
+                
+                if(sortBy == null){
+                    List<Product> list = new ProductDAO().getAllpProducts();
+                    response.getWriter().write(gson.toJson(list));
+                }
+                else{
+                    List<Product> list = new ProductDAO().sortProduct(sortBy, order);
+                    response.getWriter().write(gson.toJson(list));
+                }
                 System.out.println("Test: doGet: Done");
             }
         

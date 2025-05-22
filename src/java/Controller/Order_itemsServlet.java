@@ -44,8 +44,18 @@ public class Order_itemsServlet extends HttpServlet {
                 }
             }
             else{
-                List<Order_items> list = new Order_itemsDAO().getAllOrder_items();
-                response.getWriter().write(gson.toJson(list));
+                String sortBy = request.getParameter("sortBy");
+                String order = request.getParameter("order"); 
+                
+                if(sortBy == null){
+                    List<Order_items> list = new Order_itemsDAO().getAllOrder_items();
+                    response.getWriter().write(gson.toJson(list));
+                }
+                else{
+                    List<Order_items> list = new Order_itemsDAO().sortOrderItems(sortBy, order);
+                    response.getWriter().write(gson.toJson(list));
+                }
+                
                 System.out.println("Test: doGet: Done");
             }
         

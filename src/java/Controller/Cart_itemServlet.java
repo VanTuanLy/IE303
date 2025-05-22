@@ -44,8 +44,18 @@ public class Cart_itemServlet extends HttpServlet {
                 }
             }
             else{
-                List<Cart_item> list = new Cart_itemDAO().getAllCart_items();
-                response.getWriter().write(gson.toJson(list));
+                String sortBy = request.getParameter("sortBy");
+                String order = request.getParameter("order"); 
+                
+                if(sortBy == null){
+                    List<Cart_item> list = new Cart_itemDAO().getAllCart_items();
+                    response.getWriter().write(gson.toJson(list));
+                }
+                else{
+                    List<Cart_item> list = new Cart_itemDAO().sortCartItems(sortBy, order);
+                    response.getWriter().write(gson.toJson(list));
+                }
+               
                 System.out.println("Test: doGet: Done");
             }
         

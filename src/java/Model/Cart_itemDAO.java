@@ -132,14 +132,24 @@ public class Cart_itemDAO {
         return rowCount;
     }
     
-    public List<Cart_item> sortcCart_itemsbyID() throws  Exception{
+    public List<Cart_item> sortCartItems(String sortBy, String order) throws Exception {
         List<Cart_item> list = new ArrayList<>();
-
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM cart_item ORDER BY id ASC";
+
+        List<String> allowedSortBy = List.of("id", "sessions_id", "product_id", "quantity", "created_at", "modified_at");
+        List<String> allowedOrder = List.of("asc", "desc");
+
+        if (!allowedSortBy.contains(sortBy.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid sortBy parameter");
+        }
+        if (!allowedOrder.contains(order.toLowerCase())) {
+            order = "asc";
+        }
+
+        String sql = "SELECT * FROM cart_item ORDER BY " + sortBy + " " + order;
         PreparedStatement ps = conn.prepareStatement(sql);
-        
         ResultSet rs = ps.executeQuery();
+
         while (rs.next()) {
             list.add(new Cart_item(
                     rs.getInt("id"),
@@ -155,5 +165,6 @@ public class Cart_itemDAO {
         ps.close();
         conn.close();
         return list;
-    }    
+    }
+
 }

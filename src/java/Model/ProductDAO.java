@@ -140,14 +140,24 @@ public class ProductDAO {
         return rowCount;
     }
 
-    public List<Product> sortProductbyID() throws  Exception{
-         List<Product> list = new ArrayList<>();
+    public List<Product> sortProduct(String sortBy, String order) throws Exception {
+        List<Product> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM product ORDER BY id ASC";
 
+        List<String> allowedSortBy = List.of("id", "product_name", "pro_desc", "category", "price", "discount_id", "created_at", "modified_at");
+        List<String> allowedOrder = List.of("asc", "desc");
+
+        if (!allowedSortBy.contains(sortBy.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid sortBy parameter");
+        }
+        if (!allowedOrder.contains(order.toLowerCase())) {
+            order = "asc";
+        }
+
+        String sql = "SELECT * FROM product ORDER BY " + sortBy + " " + order;
         PreparedStatement ps = conn.prepareStatement(sql);
-        
         ResultSet rs = ps.executeQuery();
+
         while (rs.next()) {
             list.add(new Product(
                     rs.getInt("id"),
@@ -165,5 +175,6 @@ public class ProductDAO {
         ps.close();
         conn.close();
         return list;
-    }    
+    }
+    
 }

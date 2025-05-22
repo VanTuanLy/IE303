@@ -44,8 +44,18 @@ public class DiscountServlet extends HttpServlet {
                 }
             }
             else{
-                List<Discount> list = new DiscountDAO().getAlldDiscounts();
-                response.getWriter().write(gson.toJson(list));
+                String sortBy = request.getParameter("sortBy");
+                String order = request.getParameter("order"); 
+                
+                if(sortBy == null){
+                    List<Discount> list = new DiscountDAO().getAlldDiscounts();
+                    response.getWriter().write(gson.toJson(list));
+                }
+                else{
+                    List<Discount> list = new DiscountDAO().sortDiscount(sortBy, order);
+                    response.getWriter().write(gson.toJson(list));
+                }
+                
                 System.out.println("Test: doGet: Done");
             }
         

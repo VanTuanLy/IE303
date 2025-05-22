@@ -133,13 +133,24 @@ public class Order_detailsDAO {
         return rowCount;
     }
     
-    public List<Order_details> sortOrder_detailsesbyID() throws  Exception{
+    public List<Order_details> sortOrderDetails(String sortBy, String order) throws Exception {
         List<Order_details> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM order_details ORDER BY id ASC";
+
+        List<String> allowedSortBy = List.of("id", "users_id", "total", "order_status", "created_at", "modified_at");
+        List<String> allowedOrder = List.of("asc", "desc");
+
+        if (!allowedSortBy.contains(sortBy.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid sortBy parameter");
+        }
+        if (!allowedOrder.contains(order.toLowerCase())) {
+            order = "asc";
+        }
+
+        String sql = "SELECT * FROM order_details ORDER BY " + sortBy + " " + order;
         PreparedStatement ps = conn.prepareStatement(sql);
-        
         ResultSet rs = ps.executeQuery();
+
         while (rs.next()) {
             list.add(new Order_details(
                     rs.getInt("id"),
@@ -156,4 +167,5 @@ public class Order_detailsDAO {
         conn.close();
         return list;
     }
+
 }

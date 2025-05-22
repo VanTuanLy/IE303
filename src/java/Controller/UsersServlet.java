@@ -44,8 +44,18 @@ public class UsersServlet extends HttpServlet {
                 }
             }
             else{
-                List<User> list = new UserDAO().getAllUsers();
-                response.getWriter().write(gson.toJson(list));
+                String sortBy = request.getParameter("sortBy");
+                String order = request.getParameter("order"); 
+                
+                if(sortBy == null){
+                    List<User> list = new UserDAO().getAllUsers();
+                    response.getWriter().write(gson.toJson(list));
+                }
+                else{
+                    List<User> list = new UserDAO().sortUser(sortBy, order);
+                    response.getWriter().write(gson.toJson(list));
+                }
+              
                 System.out.println("Test: doGet: Done");
             }
         

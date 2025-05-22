@@ -44,8 +44,18 @@ public class Shopping_SessionServlet extends HttpServlet {
                 }
             }
             else{
-                List<Shopping_Session> list = new Shopping_SessionDAO().getAllSessions();
-                response.getWriter().write(gson.toJson(list));
+                String sortBy = request.getParameter("sortBy");
+                String order = request.getParameter("order"); 
+                
+                if(sortBy == null){
+                    List<Shopping_Session> list = new Shopping_SessionDAO().getAllSessions();
+                    response.getWriter().write(gson.toJson(list));
+                }
+                else{
+                    List<Shopping_Session> list = new Shopping_SessionDAO().sortSession(sortBy, order);
+                    response.getWriter().write(gson.toJson(list));
+                }
+ 
                 System.out.println("Test: doGet: Done");
             }
         

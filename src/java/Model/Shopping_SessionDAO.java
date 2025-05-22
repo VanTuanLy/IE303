@@ -127,14 +127,28 @@ public class Shopping_SessionDAO {
         return rowCount;
     }
     
-    public List<Shopping_Session> sortSessionbyID() throws  Exception{
-         List<Shopping_Session> list = new ArrayList<>();
+    public List<Shopping_Session> sortSession(String sortBy, String order) throws Exception {
+        List<Shopping_Session> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM user shopping_session BY id ASC";
 
+        // Danh sách cột cho phép sắp xếp
+        List<String> allowedSortBy = List.of("id", "users_id", "total", "created_at", "modified_at");
+        List<String> allowedOrder = List.of("asc", "desc");
+
+        // Validate đầu vào
+        if (!allowedSortBy.contains(sortBy.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid sortBy parameter");
+        }
+
+        if (!allowedOrder.contains(order.toLowerCase())) {
+            order = "asc"; // mặc định nếu không hợp lệ
+        }
+
+        // Tạo câu SQL an toàn
+        String sql = "SELECT * FROM shopping_session ORDER BY " + sortBy + " " + order;
         PreparedStatement ps = conn.prepareStatement(sql);
-        
         ResultSet rs = ps.executeQuery();
+
         while (rs.next()) {
             list.add(new Shopping_Session(
                     rs.getInt("id"),
@@ -150,4 +164,5 @@ public class Shopping_SessionDAO {
         conn.close();
         return list;
     }
+
 }

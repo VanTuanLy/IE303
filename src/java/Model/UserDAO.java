@@ -137,10 +137,22 @@ public class UserDAO {
         return rowCount;
     }
     
-    public List<User> sortUserbyID() throws  Exception{
-         List<User> list = new ArrayList<>();
+    public List<User> sortUser(String sortBy, String order) throws  Exception{
+        List<User> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM user ORDER BY id ASC";
+        List<String> allowedSortBy = List.of("id", "username", "user_address", "telephone", "created_at", "modified_at");
+        List<String> allowedOrder = List.of("asc", "desc");
+
+        // Kiểm tra và chuẩn hóa giá trị đầu vào
+        if (!allowedSortBy.contains(sortBy.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid sortBy parameter");
+        }
+
+        if (!allowedOrder.contains(order.toLowerCase())) {
+            order = "asc"; // mặc định nếu không hợp lệ
+        }
+
+        String sql = "SELECT * FROM users ORDER BY " + sortBy + " " + order;
         PreparedStatement ps = conn.prepareStatement(sql);
         
         ResultSet rs = ps.executeQuery();

@@ -132,13 +132,24 @@ public class DiscountDAO {
         return rowCount;
     }
     
-    public List<Discount> sortDiscountbyID() throws  Exception{
+    public List<Discount> sortDiscount(String sortBy, String order) throws Exception {
         List<Discount> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM discount ORDER BY id ASC";
+
+        List<String> allowedSortBy = List.of("id", "dis_name", "disc_desc", "discount_percent", "created_at", "modified_at");
+        List<String> allowedOrder = List.of("asc", "desc");
+
+        if (!allowedSortBy.contains(sortBy.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid sortBy parameter");
+        }
+        if (!allowedOrder.contains(order.toLowerCase())) {
+            order = "asc";
+        }
+
+        String sql = "SELECT * FROM discount ORDER BY " + sortBy + " " + order;
         PreparedStatement ps = conn.prepareStatement(sql);
-        
         ResultSet rs = ps.executeQuery();
+
         while (rs.next()) {
             list.add(new Discount(
                     rs.getInt("id"),
@@ -154,5 +165,6 @@ public class DiscountDAO {
         ps.close();
         conn.close();
         return list;
-    }    
+    }
+
 }
