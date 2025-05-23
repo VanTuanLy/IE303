@@ -77,9 +77,11 @@ public class Cart_itemServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, 
                           HttpServletResponse response) throws IOException {
         
-        if(!AuthUtil.isAdmin(request)||!AuthUtil.isUser(request)){
-            response.getWriter().write("Unauthorized");
-            return;
+        if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
         }
         
         try (BufferedReader reader = request.getReader()) {
@@ -99,9 +101,11 @@ public class Cart_itemServlet extends HttpServlet {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
         
-        if(!AuthUtil.isAdmin(request)||!AuthUtil.isUser(request)){
-            response.getWriter().write("Unauthorized");
-            return;
+        if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
         }
         
         try (BufferedReader reader = request.getReader()) {
@@ -126,9 +130,11 @@ public class Cart_itemServlet extends HttpServlet {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
         
-        if(!AuthUtil.isAdmin(request)||!AuthUtil.isUser(request)){
-            response.getWriter().write("Unauthorized");
-            return;
+        if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
         }
         
         String idParam = request.getParameter("id");

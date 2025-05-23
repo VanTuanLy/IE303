@@ -28,6 +28,7 @@ public class TinhTongDoanhThu {
         try {
             temp.addAll(details.getAllOrder_detailses());
         } catch (Exception e) {
+            e.printStackTrace();
         }
         for (Order_details i : temp)
         {

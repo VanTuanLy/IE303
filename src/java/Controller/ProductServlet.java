@@ -32,9 +32,11 @@ public class ProductServlet extends HttpServlet {
                          HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        if(!AuthUtil.isAdmin(request)||!AuthUtil.isUser(request)){
-            response.getWriter().write("Unauthorized");
-            return;
+        if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
         }
         
         try {

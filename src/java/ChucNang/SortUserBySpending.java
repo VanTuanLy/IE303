@@ -25,9 +25,6 @@ import java.util.Map;
 
 public class SortUserBySpending {
     private Order_detailsDAO details = new Order_detailsDAO();
-    
-    
-    
 
     static HashMap<Integer, Double> sortByValue(
                         HashMap<Integer, Double> hm) {
