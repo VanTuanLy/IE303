@@ -30,7 +30,8 @@ public class UserDAO {
                     rs.getString("user_address"),
                     rs.getString("telephone"),
                     rs.getString("created_at"),
-                    rs.getString("modified_at")
+                    rs.getString("modified_at"),
+                    rs.getString("role")
             ));
         }
 
@@ -58,7 +59,8 @@ public class UserDAO {
                     rs.getString("user_address"),
                     rs.getString("telephone"),
                     rs.getString("created_at"),
-                    rs.getString("modified_at")
+                    rs.getString("modified_at"),
+                    rs.getString("role")
             );
             rs.close();
             ps.close();
@@ -74,7 +76,7 @@ public class UserDAO {
 
     public void addUser(User user) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -85,6 +87,7 @@ public class UserDAO {
         ps.setString(5, user.getTelephone());
         ps.setString(6, user.getCreate_at());
         ps.setString(7, user.getModified_at());
+        ps.setString(8, user.getRole());
 
         ps.executeUpdate();
 
@@ -115,7 +118,7 @@ public class UserDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update users set username=?, passwords=?, user_address=?, telephone=?, created_at=?, modified_at=? where id=?";
+            String sql = "update users set username=?, passwords=?, user_address=?, telephone=?, created_at=?, modified_at=?, role=? where id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setString(1, user.getUsername());
@@ -124,7 +127,8 @@ public class UserDAO {
             ps.setString(4, user.getTelephone());
             ps.setString(5, user.getCreate_at());
             ps.setString(6, user.getModified_at());
-            ps.setInt(7, user.getUser_id());
+            ps.setString(7, user.getRole());
+            ps.setInt(8, user.getUser_id());
             
             rowCount = ps.executeUpdate();
             
@@ -140,7 +144,7 @@ public class UserDAO {
     public List<User> sortUser(String sortBy, String order) throws  Exception{
         List<User> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        List<String> allowedSortBy = List.of("id", "username", "user_address", "telephone", "created_at", "modified_at");
+        List<String> allowedSortBy = List.of("id", "username", "user_address", "telephone", "role", "created_at", "modified_at");
         List<String> allowedOrder = List.of("asc", "desc");
 
         // Kiểm tra và chuẩn hóa giá trị đầu vào
@@ -164,7 +168,8 @@ public class UserDAO {
                     rs.getString("user_address"),
                     rs.getString("telephone"),
                     rs.getString("created_at"),
-                    rs.getString("modified_at")
+                    rs.getString("modified_at"),
+                    rs.getString("role")
             ));
         }
 

@@ -4,9 +4,12 @@
  */
 package Controller;
 
+import Auth.JwtUtil;
+import Auth.AuthUtil;
 import Model.User;
 import Model.UserDAO;
 import com.google.gson.Gson;
+import io.jsonwebtoken.JwtException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -30,6 +33,12 @@ public class UsersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, 
                          HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
+
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try {
             String idParam = request.getParameter("id");
             if(idParam != null){
@@ -70,6 +79,11 @@ public class UsersServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, 
                           HttpServletResponse response) throws IOException {
         
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try (BufferedReader reader = request.getReader()) {
             User user = gson.fromJson(reader, User.class);
             new UserDAO().addUser(user);
@@ -86,6 +100,12 @@ public class UsersServlet extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
+        
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try (BufferedReader reader = request.getReader()) {
             User user = gson.fromJson(reader, User.class);
             int result = new UserDAO().updateUser(user);
@@ -107,6 +127,11 @@ public class UsersServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
+        
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
         
         String idParam = request.getParameter("id");
         if (idParam == null) {

@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Auth.AuthUtil;
 import Model.Shopping_Session;
 import Model.Shopping_SessionDAO;
 import com.google.gson.Gson;
@@ -30,6 +31,12 @@ public class Shopping_SessionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, 
                          HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
+        
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try {
             String idParam = request.getParameter("id");
             if(idParam != null){
@@ -70,6 +77,11 @@ public class Shopping_SessionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, 
                           HttpServletResponse response) throws IOException {
         
+        if(!AuthUtil.isUser(request)||!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try (BufferedReader reader = request.getReader()) {
             Shopping_Session shopping_Session = gson.fromJson(reader, Shopping_Session.class);
             new Shopping_SessionDAO().addSession(shopping_Session);
@@ -86,6 +98,12 @@ public class Shopping_SessionServlet extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
+        
+        if(!AuthUtil.isUser(request)||!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try (BufferedReader reader = request.getReader()) {
             Shopping_Session shopping_Session = gson.fromJson(reader, Shopping_Session.class);
             int result = new Shopping_SessionDAO().updateSession(shopping_Session);
@@ -107,6 +125,11 @@ public class Shopping_SessionServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
+        
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
         
         String idParam = request.getParameter("id");
         if (idParam == null) {

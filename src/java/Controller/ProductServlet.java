@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Auth.AuthUtil;
 import Model.Product;
 import Model.ProductDAO;
 import com.google.gson.Gson;
@@ -30,6 +31,12 @@ public class ProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, 
                          HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
+        
+        if(!AuthUtil.isAdmin(request)||!AuthUtil.isUser(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try {
             String idParam = request.getParameter("id");
             if(idParam != null){
@@ -69,6 +76,11 @@ public class ProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, 
                           HttpServletResponse response) throws IOException {
         
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try (BufferedReader reader = request.getReader()) {
             Product product = gson.fromJson(reader, Product.class);
             new ProductDAO().addProduct(product);
@@ -85,6 +97,12 @@ public class ProductServlet extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         request.setCharacterEncoding("UTF-8");
+        
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         try (BufferedReader reader = request.getReader()) {
             Product product= gson.fromJson(reader, Product.class);
             int result = new ProductDAO().updateProduct(product);
@@ -108,6 +126,12 @@ public class ProductServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         String idParam = request.getParameter("id");
+        
+        if(!AuthUtil.isAdmin(request)){
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+        
         if (idParam == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"error\":\"Thiếu tham số id\"}");

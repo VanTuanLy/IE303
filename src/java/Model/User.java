@@ -14,10 +14,11 @@ public class User {
     private String password;
     private String address;
     private String telephone;
+    private String role;
     private String create_at;
     private String modified_at;
 
-    public User(int user_id, String username, String password, String address, String telephone, String create_at, String modified_at) {
+    public User(int user_id, String username, String password, String address, String telephone, String create_at, String modified_at, String role) {
         this.user_id = user_id;
         this.username = username;
         this.password = password;
@@ -25,6 +26,7 @@ public class User {
         this.telephone = telephone;
         this.create_at = create_at;
         this.modified_at = modified_at;
+        this.role = role;
     }
 
     public int getUser_id() {
@@ -82,6 +84,15 @@ public class User {
     public void setModified_at(String modified_at) {
         this.modified_at = modified_at;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+    
     
     
 }
