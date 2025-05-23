@@ -120,4 +120,6 @@ ALTER TABLE discount ALTER COLUMN disc_desc NVARCHAR(1000);
 ALTER TABLE order_details
 ALTER COLUMN order_status NVARCHAR(255);
 
+ALTER TABLE users ADD role NVARCHAR(10);
+
 
