@@ -5,83 +5,96 @@ GO
 USE QLBHONLINE
 GO
 
+DELETE FROM order_items
+DELETE FROM cart_item
+DELETE FROM product
+DELETE FROM discount
+DELETE FROM shopping_session
+DELETE FROM order_details
+DELETE FROM users
+
+DBCC CHECKIDENT ('order_items', RESEED, 0);
+DBCC CHECKIDENT ('cart_item', RESEED, 0);
+DBCC CHECKIDENT ('users', RESEED, 0);
+DBCC CHECKIDENT ('product', RESEED, 0);
+DBCC CHECKIDENT ('discount', RESEED, 0);
+DBCC CHECKIDENT ('shopping_session', RESEED, 0);
+DBCC CHECKIDENT ('order_details', RESEED, 0);
+DBCC CHECKIDENT ('users', RESEED, 0);
+
+DROP TABLE order_items
+DROP TABLE order_details
+DROP TABLE cart_item
+DROP TABLE shopping_session
+DROP TABLE product
+DROP TABLE discount
+DROP TABLE users
 
 CREATE TABLE users (
-	id INT NOT NULL,
-	username VARCHAR(50) NOT NULL,
-	passwords VARCHAR(50) NOT NULL,
-	user_address VARCHAR(200),
-	telephone VARCHAR(20),
-	created_at DATETIME,
-	modified_at DATETIME
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	username NVARCHAR(50) UNIQUE  NOT NULL,
+	passwords NVARCHAR(50) NOT NULL,
+	user_address NVARCHAR(200),
+	telephone NVARCHAR(20),
+	created_at DATETIME DEFAULT GETDATE(),
+	modified_at DATETIME DEFAULT GETDATE(),
+	role NVARCHAR(10) DEFAULT 'user'
 );
 
 CREATE TABLE shopping_session (
-	id INT NOT NULL,
+	id INT IDENTITY(1,1) PRIMARY KEY,
 	users_id INT NOT NULL,
 	total DECIMAL,
-	created_at DATETIME,
-	modified_at DATETIME
+	created_at DATETIME DEFAULT GETDATE(),
+	modified_at DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE cart_item (
-	id INT NOT NULL,
+	id INT IDENTITY(1,1) PRIMARY KEY,
 	sessions_id INT NOT NULL,
 	product_id INT NOT NULL,
 	quantity INT,
-	created_at DATETIME,
-	modified_at DATETIME
+	created_at DATETIME DEFAULT GETDATE(),
+	modified_at DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE product (
-	id INT NOT NULL,
-	product_name VARCHAR(200),
-	pro_desc VARCHAR(1000),
-	category VARCHAR(200),
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	product_name NVARCHAR(200),
+	pro_desc NVARCHAR(1000),
+	category NVARCHAR(200),
 	price DECIMAL,
 	discount_id INT,
-	created_at DATETIME,
-	modified_at DATETIME
+	created_at DATETIME DEFAULT GETDATE(),
+	modified_at DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE discount (
-	id INT NOT NULL,
-	dis_name VARCHAR(200),
-	disc_desc VARCHAR(1000),
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	dis_name NVARCHAR(200),
+	disc_desc NVARCHAR(1000),
 	discount_percent DECIMAL,
-	created_at DATETIME,
-	modified_at DATETIME
+	created_at DATETIME DEFAULT GETDATE(),
+	modified_at DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE order_details (
-	id INT NOT NULL,
+	id INT IDENTITY(1,1) PRIMARY KEY,
 	users_id INT NOT NULL,
 	total DECIMAL,
-	order_status VARCHAR,
-	created_at DATETIME,
-	modified_at DATETIME
+	order_status NVARCHAR(200),
+	created_at DATETIME DEFAULT GETDATE(),
+	modified_at DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE order_items (
-	id INT NOT NULL,
+	id INT IDENTITY(1,1) PRIMARY KEY,
 	order_id INT NOT NULL,
 	product_id INT NOT NULL,
 	quantity INT,
-	created_at DATETIME,
-	modified_at DATETIME
+	created_at DATETIME DEFAULT GETDATE(),
+	modified_at DATETIME DEFAULT GETDATE()
 );
-
--- Tạo khóa chính
-ALTER TABLE users ADD CONSTRAINT pk_users PRIMARY KEY (id);
-
-ALTER TABLE shopping_session ADD CONSTRAINT pk_shopping_session PRIMARY KEY (id);
-ALTER TABLE cart_item ADD CONSTRAINT pk_cart_item PRIMARY KEY (id);
-
-ALTER TABLE product ADD CONSTRAINT pk_product PRIMARY KEY (id);
-ALTER TABLE discount ADD CONSTRAINT pk_discount PRIMARY KEY (id);
-
-ALTER TABLE order_details ADD CONSTRAINT pk_order_details PRIMARY KEY (id);
-ALTER TABLE order_items ADD CONSTRAINT pk_order_items PRIMARY KEY (id);
 
 -- Tạo khóa ngoại
 ALTER TABLE shopping_session 
@@ -105,70 +118,4 @@ ADD CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES order_deta
 ALTER TABLE order_items 
 ADD CONSTRAINT fk_order_items_product FOREIGN KEY (product_id) REFERENCES product(id);
 
--- Danh sách cột có thể cần đổi sang NVARCHAR
-ALTER TABLE users ALTER COLUMN username NVARCHAR(50);
-ALTER TABLE users ALTER COLUMN passwords NVARCHAR(50);
-ALTER TABLE users ALTER COLUMN user_address NVARCHAR(200);
-
-ALTER TABLE product ALTER COLUMN product_name NVARCHAR(200);
-ALTER TABLE product ALTER COLUMN pro_desc NVARCHAR(1000);
-ALTER TABLE product ALTER COLUMN category NVARCHAR(200);
-
-ALTER TABLE discount ALTER COLUMN dis_name NVARCHAR(200);
-ALTER TABLE discount ALTER COLUMN disc_desc NVARCHAR(1000);
-
-ALTER TABLE order_details
-ALTER COLUMN order_status NVARCHAR(255);
-
-ALTER TABLE users ADD role NVARCHAR(10);
-
-
-
-ALTER TABLE users
-ADD CONSTRAINT DF_users_created_at DEFAULT GETDATE() FOR created_at;
-
-ALTER TABLE users
-ADD CONSTRAINT DF_users_modified_at DEFAULT GETDATE() FOR modified_at;
-
-ALTER TABLE shopping_session
-ADD CONSTRAINT DF_shopping_session_created_at DEFAULT GETDATE() FOR created_at;
-
-ALTER TABLE shopping_session
-ADD CONSTRAINT DF_shopping_session_modified_at DEFAULT GETDATE() FOR modified_at;
-
-ALTER TABLE product
-ADD CONSTRAINT DF_product_created_at DEFAULT GETDATE() FOR created_at;
-
-ALTER TABLE product
-ADD CONSTRAINT DF_product_modified_at DEFAULT GETDATE() FOR modified_at;
-
-ALTER TABLE order_details
-ADD CONSTRAINT DF_order_details_created_at DEFAULT GETDATE() FOR created_at;
-
-ALTER TABLE order_details
-ADD CONSTRAINT DF_order_details_modified_at DEFAULT GETDATE() FOR modified_at;
-
-ALTER TABLE order_items
-ADD CONSTRAINT DF_order_items_created_at DEFAULT GETDATE() FOR created_at;
-
-ALTER TABLE order_items
-ADD CONSTRAINT DF_order_items_modified_at DEFAULT GETDATE() FOR modified_at;
-
-ALTER TABLE discount
-ADD CONSTRAINT DF_discount_created_at DEFAULT GETDATE() FOR created_at;
-
-ALTER TABLE discount
-ADD CONSTRAINT DF_discount_modified_at DEFAULT GETDATE() FOR modified_at;
-
-ALTER TABLE cart_item
-ADD CONSTRAINT DF_cart_item_created_at DEFAULT GETDATE() FOR created_at;
-
-ALTER TABLE cart_item
-ADD CONSTRAINT DF_cart_item_modified_at DEFAULT GETDATE() FOR modified_at;
-
-
-ALTER TABLE users
-ADD CONSTRAINT UQ_username UNIQUE (username); --chua chay
-
-SELECT * FROM users
 

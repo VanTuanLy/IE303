@@ -74,23 +74,41 @@ public class UserDAO {
         return null;
     }
 
-    public void addUser(User user) throws Exception {
+    public void addUser(User user, boolean isAdmin) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO users (id, username, passwords, user_address, telephone, role) VALUES (?, ?, ?, ?, ?, ?)";
+        if(isAdmin){
+            String sql = "INSERT INTO users ( username, passwords, user_address, telephone, role) VALUES ( ?, ?, ?, ?, ?)";
 
-        PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
 
-        ps.setInt(1, user.getUser_id());
-        ps.setString(2, user.getUsername());
-        ps.setString(3, user.getPassword());
-        ps.setString(4, user.getAddress());
-        ps.setString(5, user.getTelephone());
-        ps.setString(6, user.getRole());
+      
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getAddress());
+            ps.setString(4, user.getTelephone());
+            ps.setString(5, user.getRole());
 
-        ps.executeUpdate();
+            ps.executeUpdate();
 
-        ps.close();
-        conn.close();
+            ps.close();
+            conn.close();
+        }
+        else{
+            String sql = "INSERT INTO users ( username, passwords, user_address, telephone) VALUES ( ?, ?, ?, ?)";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getAddress());
+            ps.setString(4, user.getTelephone());
+
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+        }
     }
     
     public int deleteUserId(int id) throws  Exception{

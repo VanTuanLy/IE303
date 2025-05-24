@@ -86,7 +86,7 @@ public class UsersServlet extends HttpServlet {
         
         try (BufferedReader reader = request.getReader()) {
             User user = gson.fromJson(reader, User.class);
-            new UserDAO().addUser(user);
+            new UserDAO().addUser(user, AuthUtil.isAdmin(request));
             response.setContentType("application/json");
             response.getWriter().write("{\"status\":\"success\"}");
         

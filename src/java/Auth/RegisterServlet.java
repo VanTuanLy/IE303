@@ -33,7 +33,7 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try (BufferedReader reader = request.getReader()) {
             User user = gson.fromJson(reader, User.class);
-            new UserDAO().addUser(user);
+            new UserDAO().addUser(user, false);
             response.setContentType("application/json");
             response.getWriter().write("Register success");
         

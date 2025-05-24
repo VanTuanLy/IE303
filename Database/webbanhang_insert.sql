@@ -3,6 +3,23 @@
 USE QLBHONLINE
 GO
 
+DELETE FROM order_items
+DELETE FROM cart_item
+DELETE FROM product
+DELETE FROM discount
+DELETE FROM shopping_session
+DELETE FROM order_details
+DELETE FROM users
+
+DBCC CHECKIDENT ('order_items', RESEED, 0);
+DBCC CHECKIDENT ('cart_item', RESEED, 0);
+DBCC CHECKIDENT ('users', RESEED, 0);
+DBCC CHECKIDENT ('product', RESEED, 0);
+DBCC CHECKIDENT ('discount', RESEED, 0);
+DBCC CHECKIDENT ('shopping_session', RESEED, 0);
+DBCC CHECKIDENT ('order_details', RESEED, 0);
+DBCC CHECKIDENT ('users', RESEED, 0);
+
 -- INSERT discount
 INSERT INTO discount (id, dis_name, disc_desc, discount_percent, created_at, modified_at)
 VALUES (1, N'Đi Sale', N'Nếu từ tại hơn nếu người hơn.', 15, '2024-06-16 12:35:37', '2025-05-09 11:13:18');

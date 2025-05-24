@@ -21,7 +21,7 @@ public class AuthUtil {
 
             String role = JwtUtil.getRole(token);
             
-            return "ADMIN".equals(role);
+            return "admin".equals(role);
 
         } catch (JwtException e) {
             e.printStackTrace();
@@ -38,7 +38,7 @@ public class AuthUtil {
 
             String role = JwtUtil.getRole(token);
             
-            return "USER".equals(role);
+            return "user".equals(role);
 
         } catch (JwtException e) {
             e.printStackTrace();
