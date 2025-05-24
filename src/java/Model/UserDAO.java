@@ -73,6 +73,39 @@ public class UserDAO {
         conn.close();
         return null;
     }
+    
+    public User getUserByUsername(String username) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM users WHERE username = ?";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setString(1, username);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            User user = new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("passwords"),
+                    rs.getString("user_address"),
+                    rs.getString("telephone"),
+                    rs.getString("created_at"),
+                    rs.getString("modified_at"),
+                    rs.getString("role")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return user;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
+    }
 
     public void addUser(User user, boolean isAdmin) throws Exception {
         Connection conn = DBConnection.getConnection();
