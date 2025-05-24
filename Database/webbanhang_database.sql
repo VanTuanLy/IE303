@@ -123,3 +123,52 @@ ALTER COLUMN order_status NVARCHAR(255);
 ALTER TABLE users ADD role NVARCHAR(10);
 
 
+
+ALTER TABLE users
+ADD CONSTRAINT DF_users_created_at DEFAULT GETDATE() FOR created_at;
+
+ALTER TABLE users
+ADD CONSTRAINT DF_users_modified_at DEFAULT GETDATE() FOR modified_at;
+
+ALTER TABLE shopping_session
+ADD CONSTRAINT DF_shopping_session_created_at DEFAULT GETDATE() FOR created_at;
+
+ALTER TABLE shopping_session
+ADD CONSTRAINT DF_shopping_session_modified_at DEFAULT GETDATE() FOR modified_at;
+
+ALTER TABLE product
+ADD CONSTRAINT DF_product_created_at DEFAULT GETDATE() FOR created_at;
+
+ALTER TABLE product
+ADD CONSTRAINT DF_product_modified_at DEFAULT GETDATE() FOR modified_at;
+
+ALTER TABLE order_details
+ADD CONSTRAINT DF_order_details_created_at DEFAULT GETDATE() FOR created_at;
+
+ALTER TABLE order_details
+ADD CONSTRAINT DF_order_details_modified_at DEFAULT GETDATE() FOR modified_at;
+
+ALTER TABLE order_items
+ADD CONSTRAINT DF_order_items_created_at DEFAULT GETDATE() FOR created_at;
+
+ALTER TABLE order_items
+ADD CONSTRAINT DF_order_items_modified_at DEFAULT GETDATE() FOR modified_at;
+
+ALTER TABLE discount
+ADD CONSTRAINT DF_discount_created_at DEFAULT GETDATE() FOR created_at;
+
+ALTER TABLE discount
+ADD CONSTRAINT DF_discount_modified_at DEFAULT GETDATE() FOR modified_at;
+
+ALTER TABLE cart_item
+ADD CONSTRAINT DF_cart_item_created_at DEFAULT GETDATE() FOR created_at;
+
+ALTER TABLE cart_item
+ADD CONSTRAINT DF_cart_item_modified_at DEFAULT GETDATE() FOR modified_at;
+
+
+ALTER TABLE users
+ADD CONSTRAINT UQ_username UNIQUE (username); --chua chay
+
+SELECT * FROM users
+

@@ -2,6 +2,7 @@
 
 USE QLBHONLINE
 GO
+
 -- INSERT discount
 INSERT INTO discount (id, dis_name, disc_desc, discount_percent, created_at, modified_at)
 VALUES (1, N'Đi Sale', N'Nếu từ tại hơn nếu người hơn.', 15, '2024-06-16 12:35:37', '2025-05-09 11:13:18');

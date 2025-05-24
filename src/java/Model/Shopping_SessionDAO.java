@@ -40,15 +40,14 @@ public class Shopping_SessionDAO {
 
     public void addSession(Shopping_Session session) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO shopping_session VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO shopping_session (id, users_id, total) VALUES (?, ?, ?)";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
         ps.setInt(1, session.getSession_id());
         ps.setInt(2, session.getUser_id());
         ps.setDouble(3, session.getTotal());
-        ps.setString(4, session.getCreate_at());
-        ps.setString(5, session.getModified_at());
+        
         
         ps.executeUpdate();
         

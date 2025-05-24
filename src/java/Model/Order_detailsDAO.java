@@ -41,7 +41,7 @@ public class Order_detailsDAO {
 
     public void addOrder_details(Order_details ord) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO order_details VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO order_details (id, users_id, total, order_status) VALUES (?, ?, ?, ?)";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -49,8 +49,7 @@ public class Order_detailsDAO {
         ps.setInt(2, ord.getUser_id());
         ps.setDouble(3, ord.getTotal());
         ps.setString(4, ord.getStatus());
-        ps.setString(5, ord.getCreate_at());
-        ps.setString(6, ord.getModified_at());
+
         
         ps.executeUpdate();
         

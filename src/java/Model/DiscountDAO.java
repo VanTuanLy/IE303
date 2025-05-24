@@ -41,7 +41,7 @@ public class DiscountDAO {
 
     public void addDiscount(Discount dis) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO discount VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO discount (id, dis_name, disc_desc, discount_percent) VALUES (?, ?, ?, ?)";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -49,8 +49,6 @@ public class DiscountDAO {
         ps.setString(2, dis.getDisc_name());
         ps.setString(3, dis.getDisc_desc());
         ps.setDouble(4, dis.getDiscount_percent());
-        ps.setString(5, dis.getCreate_at());
-        ps.setString(6, dis.getModified_at());
         
         ps.executeUpdate();
         

@@ -76,7 +76,7 @@ public class UserDAO {
 
     public void addUser(User user) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (id, username, passwords, user_address, telephone, role) VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -85,9 +85,7 @@ public class UserDAO {
         ps.setString(3, user.getPassword());
         ps.setString(4, user.getAddress());
         ps.setString(5, user.getTelephone());
-        ps.setString(6, user.getCreate_at());
-        ps.setString(7, user.getModified_at());
-        ps.setString(8, user.getRole());
+        ps.setString(6, user.getRole());
 
         ps.executeUpdate();
 

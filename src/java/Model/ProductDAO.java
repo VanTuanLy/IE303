@@ -43,7 +43,7 @@ public class ProductDAO {
 
     public void addProduct(Product product) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO product VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO product (id, product_name, pro_desc, category, price, discount_id) VALUES (?, ?, ?, ?, ?, ?)";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -53,8 +53,6 @@ public class ProductDAO {
         ps.setString(4, product.getCatogry());
         ps.setDouble(5, product.getPrice());
         ps.setInt(6, product.getDiscount_id());
-        ps.setString(7, (String) product.getCreate_at());
-        ps.setString(8, (String) product.getModified_at());
         
         ps.executeUpdate();
         

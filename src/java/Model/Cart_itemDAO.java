@@ -41,7 +41,7 @@ public class Cart_itemDAO {
 
     public void addCart_item(Cart_item item) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO cart_item VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cart_item (id, sessions_id, product_id, quantity) VALUES (?, ?, ?, ?)";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -49,8 +49,6 @@ public class Cart_itemDAO {
         ps.setInt(2, item.getSessions_id());
         ps.setInt(3, item.getProduct_id());
         ps.setInt(4, item.getQuantity());
-        ps.setString(5, item.getCreate_at());
-        ps.setString(6, item.getModified_at());
         
         ps.executeUpdate();
         
