@@ -24,6 +24,14 @@ public class Order_items {
         this.create_at = create_at;
         this.modified_at = modified_at;
     }
+    
+    public Order_items(int order_id, int product_id, int quantity) {
+        
+        this.order_id = order_id;
+        this.product_id = product_id;
+        this.quantity = quantity;
+        
+    }
 
     public int getOrder_itemsid() {
         return order_itemsid;

@@ -26,6 +26,14 @@ public class Order_details {
         this.modified_at = modified_at;
     }
 
+    public Order_details(int user_id, double total, String status) {
+        this.user_id = user_id;
+        this.total = total;
+        this.status = status;
+    }
+    
+    
+
     public int getOrder_id() {
         return order_id;
     }

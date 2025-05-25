@@ -29,5 +29,15 @@ public class AddToCart extends CartAction {
             Logger.getLogger(AddToCart.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public void execute(int productId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void execute() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
 

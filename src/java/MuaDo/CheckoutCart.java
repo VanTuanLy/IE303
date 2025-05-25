@@ -6,9 +6,15 @@ package MuaDo;
 
 import Model.Cart_item;
 import Model.Cart_itemDAO;
+import Model.Order_details;
+import Model.Order_detailsDAO;
+import Model.Order_items;
+import Model.Order_itemsDAO;
 import Model.Shopping_Session;
 import Model.Shopping_SessionDAO;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,25 +26,47 @@ public class CheckoutCart extends CartAction {
     }
 
     @Override
-    public void execute(int productId, int quantity) {
+    public void execute() throws Exception{
+        
         Shopping_Session session = new Shopping_SessionDAO().getShopping_SessionByUserId(userId);
+        if (session == null){
+            throw new Exception("Không tìm thấy phiên mua hàng của người dùng.");
+        }
         List<Cart_item> items = new Cart_itemDAO().getListCart_itemById(session.getSession_id());
 
-        if (items.isEmpty()) return;
+        if (items.isEmpty()){
+            throw new Exception("Giỏ hàng đang trống, không thể thanh toán.");
+        }
 
         // Tính tổng tiền
         double total = session.getTotal();
 
         // Tạo order_details
-        int orderId = OrderDetailsDAO.createOrder(userId, total);
+        String status = "Đang xử lý";
+        Order_details order_details = new Order_details(userId, total, status);
+        int orderId = new Order_detailsDAO().addOrder_details(order_details);
 
         // Tạo order_items
-        for (CartItem item : items) {
-            OrderItemsDAO.createOrderItem(orderId, item.getProductId(), item.getQuantity());
+
+        for (Cart_item item : items) {
+            Order_items order_items = new Order_items(orderId, item.getProduct_id(), item.getQuantity());
+            new Order_itemsDAO().addOrder_items(order_items);
         }
 
         // Xoá giỏ hàng sau khi thanh toán
-        CartItemDAO.clearCart(session.getId());
+        new Cart_itemDAO().deleteCart_itemIdbySessionid(session.getSession_id());
+        new Shopping_SessionDAO().deleteSessionId(session.getSession_id());
+            
+    }
+
+    @Override
+    public void execute(int productId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void execute(int productId, int quantity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
 

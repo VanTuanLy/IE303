@@ -208,6 +208,17 @@ public class Cart_itemDAO {
         }
     }
     
+    public void deleteCart_itemIdbySessionid(int sessionId) throws Exception {
+        String sql = "DELETE FROM cart_item WHERE sessions_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, sessionId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public int updateCart_item(Cart_item item)throws  Exception{
         int rowCount = 0;
         try {

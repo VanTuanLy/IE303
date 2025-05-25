@@ -20,13 +20,23 @@ public class RemoveFromCart extends CartAction {
     }
 
     @Override
-    public void execute(int productId, int quantity) {
+    public void execute(int productId) {
         try {
             Shopping_Session session = new Shopping_SessionDAO().getShopping_SessionByUserId(userId);
             new Cart_itemDAO().deleteCart_itemId(session.getSession_id(),productId);
         } catch (Exception ex) {
             Logger.getLogger(RemoveFromCart.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void execute(int productId, int quantity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void execute() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
 

@@ -17,4 +17,6 @@ public abstract class CartAction {
     }
     
     public abstract void execute(int productId, int quantity);
+    public abstract void execute(int productId);
+    public abstract void execute() throws Exception;
 }

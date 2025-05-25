@@ -10,6 +10,7 @@ import Model.User;
 import Model.UserDAO;
 import MuaDo.AddToCart;
 import MuaDo.CartAction;
+import MuaDo.CheckoutCart;
 import MuaDo.RemoveFromCart;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,24 +46,40 @@ public class CartServlet extends HttpServlet {
         try {
             
             String username = JwtUtil.getUsername(token); 
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
 
             User user = new UserDAO().getUserByUsername(username);
             
             switch (action) {
-                case "add":
+                case "add": {
+                    int productId = Integer.parseInt(request.getParameter("productId"));
+                    int quantity = Integer.parseInt(request.getParameter("quantity"));
                     CartAction add = new AddToCart(user.getUser_id());
                     add.execute(productId, quantity);
                     response.setStatus(HttpServletResponse.SC_OK);
                     response.getWriter().write("Added to cart successfully");
                     break;
-                case "delete":
+                }
+                case "delete":{
+                    int productId = Integer.parseInt(request.getParameter("productId"));
                     CartAction delete = new RemoveFromCart(user.getUser_id());
-                    delete.execute(productId, quantity);
+                    delete.execute(productId);
                     response.setStatus(HttpServletResponse.SC_OK);
                     response.getWriter().write("Delete cart successfully");
                     break;
+                }
+                case "checkout": {
+                    try{
+                        CartAction checkout = new CheckoutCart(user.getUser_id());
+                        checkout.execute();
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.getWriter().write("Checkout cart successfully");
+                        break;
+                    }
+                    catch (Exception e) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.getWriter().write("Không thể thanh toán: " + e.getMessage());
+                    }
+                }
                 default:
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     response.getWriter().write("Unknown action");

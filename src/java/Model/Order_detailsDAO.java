@@ -8,6 +8,7 @@ import ConnDB.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,23 +40,27 @@ public class Order_detailsDAO {
         return list;
     }
 
-    public void addOrder_details(Order_details ord) throws Exception {
-        Connection conn = DBConnection.getConnection();
+    public int addOrder_details(Order_details ord) throws Exception {
         String sql = "INSERT INTO order_details ( users_id, total, order_status) VALUES ( ?, ?, ?)";
-        
-        PreparedStatement ps = conn.prepareStatement(sql);
-        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+   
+            ps.setInt(1, ord.getUser_id());
+            ps.setDouble(2, ord.getTotal());
+            ps.setString(3, ord.getStatus());
 
-        ps.setInt(1, ord.getUser_id());
-        ps.setDouble(2, ord.getTotal());
-        ps.setString(3, ord.getStatus());
-
         
-        ps.executeUpdate();
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // trả về ID vừa insert
+                }
+            }
+        }
+        throw new Exception("Không thể tạo order_details");
         
-        ps.close();
-        conn.close();
     }
+    
     
     public Order_details getOrder_detailsById(int id) throws Exception {
         Connection conn = DBConnection.getConnection();
