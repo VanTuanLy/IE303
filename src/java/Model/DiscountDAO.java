@@ -41,14 +41,14 @@ public class DiscountDAO {
 
     public void addDiscount(Discount dis) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO discount (id, dis_name, disc_desc, discount_percent) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO discount ( dis_name, disc_desc, discount_percent) VALUES ( ?, ?, ?)";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        ps.setInt(1, dis.getDiscount_id());
-        ps.setString(2, dis.getDisc_name());
-        ps.setString(3, dis.getDisc_desc());
-        ps.setDouble(4, dis.getDiscount_percent());
+
+        ps.setString(1, dis.getDisc_name());
+        ps.setString(2, dis.getDisc_desc());
+        ps.setDouble(3, dis.getDiscount_percent());
         
         ps.executeUpdate();
         

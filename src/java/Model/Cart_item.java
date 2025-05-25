@@ -25,6 +25,14 @@ public class Cart_item {
         this.modified_at = modified_at;
     }
 
+    public Cart_item( int session_id, int product_id, int quantity) {
+        this.sessions_id = session_id;
+        this.product_id = product_id;
+        this.quantity = quantity;
+    }
+    
+    
+
     public int getItem_id() {
         return item_id;
     }

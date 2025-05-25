@@ -23,6 +23,10 @@ public class Shopping_Session {
         this.modified_at = modified_at;
     }
 
+    public Shopping_Session(int user_id) {
+        this.user_id = user_id;
+    }
+
     public int getSession_id() {
         return session_id;
     }
@@ -63,6 +67,6 @@ public class Shopping_Session {
         this.modified_at = modified_at;
     }
     
-    
+   
     
 }

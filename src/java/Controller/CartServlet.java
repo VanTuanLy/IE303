@@ -4,10 +4,13 @@
  */
 package Controller;
 
+import Auth.AuthUtil;
 import Auth.JwtUtil;
 import Model.User;
 import Model.UserDAO;
-import MuaDo.Cart;
+import MuaDo.AddToCart;
+import MuaDo.CartAction;
+import MuaDo.RemoveFromCart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +19,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,40 +29,51 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(name = "CartServlet", urlPatterns = {"/CartServlet"})
 public class CartServlet extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       response.setCharacterEncoding("UTF-8");
+       response.setContentType("text/plain");
+       if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
+        }
+
+        String token = request.getHeader("Authorization");
         String action = request.getParameter("action");
+        try {
+            
+            String username = JwtUtil.getUsername(token); 
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-        HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-
-        if (cart == null) {
-            String username = JwtUtil.getUsername(action); // lấy từ session login
             User user = new UserDAO().getUserByUsername(username);
-            cart = new Cart(user.getUser_id());
-            session.setAttribute("cart", cart);
+            
+            switch (action) {
+                case "add":
+                    CartAction add = new AddToCart(user.getUser_id());
+                    add.execute(productId, quantity);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write("Added to cart successfully");
+                    break;
+                case "delete":
+                    CartAction delete = new RemoveFromCart(user.getUser_id());
+                    delete.execute(productId, quantity);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write("Delete cart successfully");
+                    break;
+                default:
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("Unknown action");
+                    break;
+            }
+
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Error: " + e.getMessage());
         }
-
-        switch (action) {
-            case "add":
-                int productId = Integer.parseInt(request.getParameter("productId"));
-                int qty = Integer.parseInt(request.getParameter("quantity"));
-                Product product = ProductDAO.getById(productId);
-                cart.addItem(product, qty);
-                break;
-
-            case "remove":
-                int pid = Integer.parseInt(request.getParameter("productId"));
-                cart.removeItem(pid);
-                break;
-
-            case "checkout":
-                Order order = cart.checkout();
-                // Lưu order vào DB
-                session.removeAttribute("cart");
-                break;
-        }
-
-        response.sendRedirect("cart.jsp");
+       
     }
 
 }

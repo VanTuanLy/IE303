@@ -41,14 +41,14 @@ public class Order_detailsDAO {
 
     public void addOrder_details(Order_details ord) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO order_details (id, users_id, total, order_status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO order_details ( users_id, total, order_status) VALUES ( ?, ?, ?)";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
-        ps.setInt(1, ord.getOrder_id());
-        ps.setInt(2, ord.getUser_id());
-        ps.setDouble(3, ord.getTotal());
-        ps.setString(4, ord.getStatus());
+
+        ps.setInt(1, ord.getUser_id());
+        ps.setDouble(2, ord.getTotal());
+        ps.setString(3, ord.getStatus());
 
         
         ps.executeUpdate();

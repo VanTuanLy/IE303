@@ -7,6 +7,7 @@ package Model;
 import ConnDB.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,21 +39,21 @@ public class Shopping_SessionDAO {
         return list;
     }
 
-    public void addSession(Shopping_Session session) throws Exception {
-        Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO shopping_session (id, users_id, total) VALUES (?, ?, ?)";
-        
-        PreparedStatement ps = conn.prepareStatement(sql);
-        
-        ps.setInt(1, session.getSession_id());
-        ps.setInt(2, session.getUser_id());
-        ps.setDouble(3, session.getTotal());
-        
-        
-        ps.executeUpdate();
-        
-        ps.close();
-        conn.close();
+    public int addSession(Shopping_Session session) throws Exception {
+        String sql = "INSERT INTO shopping_session (users_id, total) VALUES (?, 0)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setInt(1, session.getUser_id());
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // trả về ID vừa insert
+                }
+            }
+        }
+        throw new Exception("Không thể tạo shopping session");
     }
     
     public Shopping_Session getShopping_SessionById(int id) throws Exception {
@@ -62,6 +63,36 @@ public class Shopping_SessionDAO {
         PreparedStatement ps = conn.prepareStatement(sql);
         
         ps.setInt(1, id);
+        
+        ResultSet rs = ps.executeQuery();
+        
+        if(rs.next()){
+            Shopping_Session shopping_Session = new Shopping_Session(
+                    rs.getInt("id"),
+                    rs.getInt("users_id"),
+                    rs.getDouble("total"),
+                    rs.getString("created_at"),
+                    rs.getString("modified_at")
+            );
+            rs.close();
+            ps.close();
+            conn.close();
+            return shopping_Session;
+        }
+        
+        rs.close();
+        ps.close();
+        conn.close();
+        return null;
+    }
+    
+    public Shopping_Session getShopping_SessionByUserId(int user_id) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM shopping_session WHERE users_id = ?";
+        
+        PreparedStatement ps = conn.prepareStatement(sql);
+        
+        ps.setInt(1, user_id);
         
         ResultSet rs = ps.executeQuery();
         
@@ -126,6 +157,25 @@ public class Shopping_SessionDAO {
         return rowCount;
     }
     
+    public int updateSession(int sessions_id, double total) throws  Exception{
+        int rowCount = 0;
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "update shopping_session set total=? where id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setDouble(1, total);
+            ps.setInt(2, sessions_id);
+            
+            rowCount = ps.executeUpdate();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rowCount;
+    }
+    
     public List<Shopping_Session> sortSession(String sortBy, String order) throws Exception {
         List<Shopping_Session> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
@@ -162,6 +212,17 @@ public class Shopping_SessionDAO {
         ps.close();
         conn.close();
         return list;
+    }
+    
+    public Shopping_Session findOrCreateByUserId(int user_id) throws Exception{
+        Shopping_Session shopping_Session = getShopping_SessionByUserId(user_id);
+        if(shopping_Session == null){
+            shopping_Session = new Shopping_Session(user_id);
+            int newId = addSession(shopping_Session);
+            shopping_Session = new Shopping_SessionDAO().getShopping_SessionById(newId);
+        }
+        
+        return shopping_Session;
     }
 
 }
