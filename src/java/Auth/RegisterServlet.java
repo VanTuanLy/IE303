@@ -5,15 +5,8 @@
 package Auth;
 
 import java.io.IOException;
-import ConnDB.DBConnection;
 import Model.User;
-import Model.UserDAO;
-import java.sql.Connection;
 import com.google.gson.Gson;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.io.PrintWriter;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +26,7 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try (BufferedReader reader = request.getReader()) {
             User user = gson.fromJson(reader, User.class);
-            new UserDAO().addUser(user, false);
+            new UserService().registerUser(user);
             response.setContentType("application/json");
             response.getWriter().write("Register success");
         

@@ -5,12 +5,6 @@
 package Auth;
 
 import java.io.IOException;
-import ConnDB.DBConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.io.PrintWriter;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,17 +21,10 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String passwords = req.getParameter("passwords");
 
-        try (Connection conn = DBConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT role FROM users WHERE username = ? AND passwords = ?");
-            ps.setString(1, username);
-            ps.setString(2, passwords);
-            ResultSet rs = ps.executeQuery();
+        try {
+            String token = new UserService().authenticateUser(username, passwords); // Gọi service để xử lý
 
-            if (rs.next()) {
-                String role = rs.getString("role");
-
-                String token = JwtUtil.generateToken(username, role);
-
+            if (token != null) {
                 resp.setContentType("application/json");
                 resp.getWriter().write("{\"token\": \"" + token + "\"}");
             } else {
@@ -46,7 +33,7 @@ public class LoginServlet extends HttpServlet {
             }
         } catch (Exception e) {
             resp.setStatus(500);
-            resp.getWriter().write("Server error");
+            resp.getWriter().write("Server error: " + e.getMessage()); // Log lỗi chi tiết hơn
         }
     }
 }

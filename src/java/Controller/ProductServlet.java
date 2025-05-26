@@ -57,7 +57,7 @@ public class ProductServlet extends HttpServlet {
                 String order = request.getParameter("order"); 
                 
                 if(sortBy == null){
-                    List<Product> list = new ProductDAO().getAllpProducts();
+                    List<Product> list = new ProductDAO().getAllProducts();
                     response.getWriter().write(gson.toJson(list));
                 }
                 else{

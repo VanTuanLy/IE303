@@ -16,7 +16,7 @@ import java.util.List;
  * @author Vo Tien Trung
  */
 public class ProductDAO {
-    public List<Product> getAllpProducts() throws Exception {
+    public List<Product> getAllProducts() throws Exception {
         List<Product> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
         String sql = "SELECT * FROM product";
