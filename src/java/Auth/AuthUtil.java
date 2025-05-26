@@ -4,7 +4,7 @@
  */
 package Auth;
 
-import com.sun.net.httpserver.HttpServer;
+
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 
