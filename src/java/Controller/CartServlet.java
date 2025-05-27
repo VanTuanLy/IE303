@@ -93,4 +93,33 @@ public class CartServlet extends HttpServlet {
        
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain");
+        if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
+        }
+       
+        String token = request.getHeader("Authorization");
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        try{
+            String username = JwtUtil.getUsername(token); 
+            User user = new UserDAO().getUserByUsername(username);
+            CartAction delete = new RemoveFromCart(user.getUser_id());
+            delete.execute(productId);
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("Delete cart successfully");
+        }
+        catch (Exception e){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Error: " + e.getMessage());
+        }
+    }
+    
+    
+
 }

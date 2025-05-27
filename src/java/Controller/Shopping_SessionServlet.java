@@ -32,14 +32,28 @@ public class Shopping_SessionServlet extends HttpServlet {
                          HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        if(!AuthUtil.isAdmin(request)){
-            response.getWriter().write("Unauthorized");
-            return;
+        if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
         }
         
         try {
             String idParam = request.getParameter("id");
-            if(idParam != null){
+            String user_id = request.getParameter("user_id");
+            if(user_id != null){
+                int id = Integer.parseInt(user_id);
+                Shopping_Session shopping_Session = new Shopping_SessionDAO().getShopping_SessionByUserId(id);
+                if (shopping_Session != null) {
+                    response.getWriter().write(gson.toJson(shopping_Session));
+                }
+                else {
+                    response.setStatus(404);
+                    response.getWriter().write("{\"error\":\"Shopping_Session not found\"}");
+                }
+            }
+            else if(idParam != null && AuthUtil.isAdmin(request)){
                 int id = Integer.parseInt(idParam);
                 Shopping_Session shopping_Session = new Shopping_SessionDAO().getShopping_SessionById(id);
                 if (shopping_Session != null) {
@@ -50,7 +64,7 @@ public class Shopping_SessionServlet extends HttpServlet {
                     response.getWriter().write("{\"error\":\"Shopping_Session not found\"}");
                 }
             }
-            else{
+            else if(AuthUtil.isAdmin(request)){
                 String sortBy = request.getParameter("sortBy");
                 String order = request.getParameter("order"); 
                 
