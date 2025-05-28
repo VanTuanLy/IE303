@@ -12,18 +12,18 @@ public class Product {
     private int product_id;
     private String product_name;
     private String product_desc;
-    private String catogry;
+    private String category;
     private double price;
     private int discount_id;
     private String create_at;
     private String modified_at;
     
 
-    public Product(int id, String product_name, String product_desc, String catogry, double price, int discount_id, String create_at, String modified_at) {
+    public Product(int id, String product_name, String product_desc, String category, double price, int discount_id, String create_at, String modified_at) {
         this.product_id = id;
         this.product_name = product_name;
         this.product_desc = product_desc;
-        this.catogry = catogry;
+        this.category = category;
         this.price = price;
         this.discount_id = discount_id;
         this.create_at = create_at;
@@ -53,12 +53,12 @@ public class Product {
         this.product_desc = product_desc;
     }
 
-    public String getCatogry() {
-        return catogry;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCatogry(String catogry) {
-        this.catogry = catogry;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public double getPrice() {
