@@ -33,6 +33,8 @@ public class ViewCart extends CartAction{
         } catch (Exception ex) {
             Logger.getLogger(ViewCart.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if(list.isEmpty())
+            return null;
         return list;
     }
 

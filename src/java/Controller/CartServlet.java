@@ -50,7 +50,12 @@ public class CartServlet extends HttpServlet {
         try {
             User user = new UserDAO().getUserByUsername(username);
             CartAction show = new ViewCart(user.getUser_id());
-            response.getWriter().write(gson.toJson(show.showCart()));
+            if(show.showCart()==null){
+                response.getWriter().write("Chưa có hàng trong giỏ hàng");
+            }
+            else{
+                response.getWriter().write(gson.toJson(show.showCart()));
+            }
         } catch (Exception ex) {
             Logger.getLogger(CartServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
