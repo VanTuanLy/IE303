@@ -24,7 +24,7 @@ public class Order_itemsDAO {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             list.add(new Order_items(
-                    rs.getInt("id"),
+                    rs.getInt("order_items_id"),
                     rs.getInt("order_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
@@ -57,7 +57,7 @@ public class Order_itemsDAO {
     
     public Order_items getOrder_itemsById(int id) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM order_items WHERE id = ?";
+        String sql = "SELECT * FROM order_items WHERE order_items_id = ?";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -67,7 +67,7 @@ public class Order_itemsDAO {
         
         if(rs.next()){
             Order_items order_items = new Order_items(
-                    rs.getInt("id"),
+                    rs.getInt("order_items_id"),
                     rs.getInt("order_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
@@ -90,7 +90,7 @@ public class Order_itemsDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "DELETE FROM order_items where id = ?";
+            String sql = "DELETE FROM order_items where order_items_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
@@ -109,7 +109,7 @@ public class Order_itemsDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update order_items set order_id=?, product_id=?, quantity=?, created_at=?, modified_at=? where id=?";
+            String sql = "update order_items set order_id=?, product_id=?, quantity=?, created_at=?, modified_at=? where order_items_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setInt(1, order_items.getOrder_id());
@@ -134,7 +134,7 @@ public class Order_itemsDAO {
         List<Order_items> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
 
-        List<String> allowedSortBy = List.of("id", "order_id", "product_id", "quantity", "created_at", "modified_at");
+        List<String> allowedSortBy = List.of("order_items_id", "order_id", "product_id", "quantity", "created_at", "modified_at");
         List<String> allowedOrder = List.of("asc", "desc");
 
         if (!allowedSortBy.contains(sortBy.toLowerCase())) {
@@ -150,7 +150,7 @@ public class Order_itemsDAO {
 
         while (rs.next()) {
             list.add(new Order_items(
-                    rs.getInt("id"),
+                    rs.getInt("order_items_id"),
                     rs.getInt("order_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),

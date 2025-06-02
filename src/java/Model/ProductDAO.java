@@ -24,7 +24,7 @@ public class ProductDAO {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             list.add(new Product(
-                    rs.getInt("id"),
+                    rs.getInt("product_id"),
                     rs.getString("product_name"),
                     rs.getString("pro_desc"),
                     rs.getString("category"),
@@ -61,7 +61,7 @@ public class ProductDAO {
     
     public Product getProductById(int id) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM product WHERE id = ?";
+        String sql = "SELECT * FROM product WHERE product_id = ?";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -71,7 +71,7 @@ public class ProductDAO {
         
         if(rs.next()){
             Product product = new Product(
-                    rs.getInt("id"),
+                    rs.getInt("product_id"),
                     rs.getString("product_name"),
                     rs.getString("pro_desc"),
                     rs.getString("category"),
@@ -96,7 +96,7 @@ public class ProductDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "DELETE FROM product where id = ?";
+            String sql = "DELETE FROM product where product_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
@@ -115,7 +115,7 @@ public class ProductDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update product set product_name=?, pro_desc=?, category=?, price=?, discount_id=?,created_at=?, modified_at=? where id=?";
+            String sql = "update product set product_name=?, pro_desc=?, category=?, price=?, discount_id=?,created_at=?, modified_at=? where product_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setString(1, product.getProduct_name());
@@ -141,7 +141,7 @@ public class ProductDAO {
         List<Product> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
 
-        List<String> allowedSortBy = List.of("id", "product_name", "pro_desc", "category", "price", "discount_id", "created_at", "modified_at");
+        List<String> allowedSortBy = List.of("product_id", "product_name", "pro_desc", "category", "price", "discount_id", "created_at", "modified_at");
         List<String> allowedOrder = List.of("asc", "desc");
 
         if (!allowedSortBy.contains(sortBy.toLowerCase())) {
@@ -157,7 +157,7 @@ public class ProductDAO {
 
         while (rs.next()) {
             list.add(new Product(
-                    rs.getInt("id"),
+                    rs.getInt("product_id"),
                     rs.getString("product_name"),
                     rs.getString("pro_desc"),
                     rs.getString("category"),

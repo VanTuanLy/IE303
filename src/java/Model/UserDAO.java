@@ -24,7 +24,7 @@ public class UserDAO {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             list.add(new User(
-                    rs.getInt("id"),
+                    rs.getInt("users_id"),
                     rs.getString("username"),
                     rs.getString("passwords"),
                     rs.getString("user_address"),
@@ -43,7 +43,7 @@ public class UserDAO {
     
     public User getUserById(int id) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT * FROM users WHERE users_id = ?";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -53,7 +53,7 @@ public class UserDAO {
         
         if(rs.next()){
             User user = new User(
-                    rs.getInt("id"),
+                    rs.getInt("users_id"),
                     rs.getString("username"),
                     rs.getString("passwords"),
                     rs.getString("user_address"),
@@ -86,7 +86,7 @@ public class UserDAO {
         
         if(rs.next()){
             User user = new User(
-                    rs.getInt("id"),
+                    rs.getInt("users_id"),
                     rs.getString("username"),
                     rs.getString("passwords"),
                     rs.getString("user_address"),
@@ -148,7 +148,7 @@ public class UserDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "DELETE FROM users where id = ?";
+            String sql = "DELETE FROM users where users_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
@@ -167,7 +167,7 @@ public class UserDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update users set username=?, passwords=?, user_address=?, telephone=?, created_at=?, modified_at=?, role=? where id=?";
+            String sql = "update users set username=?, passwords=?, user_address=?, telephone=?, created_at=?, modified_at=?, role=? where users_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setString(1, user.getUsername());
@@ -193,7 +193,7 @@ public class UserDAO {
     public List<User> sortUser(String sortBy, String order) throws  Exception{
         List<User> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        List<String> allowedSortBy = List.of("id", "username", "user_address", "telephone", "role", "created_at", "modified_at");
+        List<String> allowedSortBy = List.of("users_id", "username", "user_address", "telephone", "role", "created_at", "modified_at");
         List<String> allowedOrder = List.of("asc", "desc");
 
         // Kiểm tra và chuẩn hóa giá trị đầu vào
@@ -211,7 +211,7 @@ public class UserDAO {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             list.add(new User(
-                    rs.getInt("id"),
+                    rs.getInt("users_id"),
                     rs.getString("username"),
                     rs.getString("passwords"),
                     rs.getString("user_address"),

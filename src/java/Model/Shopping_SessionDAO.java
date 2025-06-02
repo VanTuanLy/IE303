@@ -25,7 +25,7 @@ public class Shopping_SessionDAO {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             list.add(new Shopping_Session(
-                    rs.getInt("id"),
+                    rs.getInt("sessions_id"),
                     rs.getInt("users_id"),
                     rs.getDouble("total"),
                     rs.getString("created_at"),
@@ -58,7 +58,7 @@ public class Shopping_SessionDAO {
     
     public Shopping_Session getShopping_SessionById(int id) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM shopping_session WHERE id = ?";
+        String sql = "SELECT * FROM shopping_session WHERE sessions_id = ?";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -68,7 +68,7 @@ public class Shopping_SessionDAO {
         
         if(rs.next()){
             Shopping_Session shopping_Session = new Shopping_Session(
-                    rs.getInt("id"),
+                    rs.getInt("sessions_id"),
                     rs.getInt("users_id"),
                     rs.getDouble("total"),
                     rs.getString("created_at"),
@@ -98,7 +98,7 @@ public class Shopping_SessionDAO {
         
         if(rs.next()){
             Shopping_Session shopping_Session = new Shopping_Session(
-                    rs.getInt("id"),
+                    rs.getInt("sessions_id"),
                     rs.getInt("users_id"),
                     rs.getDouble("total"),
                     rs.getString("created_at"),
@@ -120,7 +120,7 @@ public class Shopping_SessionDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "DELETE FROM shopping_session where id = ?";
+            String sql = "DELETE FROM shopping_session where sessions_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
@@ -139,7 +139,7 @@ public class Shopping_SessionDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update shopping_session set users_id=?, total=?, created_at=?, modified_at=? where id=?";
+            String sql = "update shopping_session set users_id=?, total=?, created_at=?, modified_at=? where sessions_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setInt(1, session.getUser_id());
@@ -161,7 +161,7 @@ public class Shopping_SessionDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update shopping_session set total=? where id=?";
+            String sql = "update shopping_session set total=? where sessions_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setDouble(1, total);
@@ -181,7 +181,7 @@ public class Shopping_SessionDAO {
         Connection conn = DBConnection.getConnection();
 
         // Danh sách cột cho phép sắp xếp
-        List<String> allowedSortBy = List.of("id", "users_id", "total", "created_at", "modified_at");
+        List<String> allowedSortBy = List.of("sessions_id", "users_id", "total", "created_at", "modified_at");
         List<String> allowedOrder = List.of("asc", "desc");
 
         // Validate đầu vào
@@ -200,7 +200,7 @@ public class Shopping_SessionDAO {
 
         while (rs.next()) {
             list.add(new Shopping_Session(
-                    rs.getInt("id"),
+                    rs.getInt("sessions_id"),
                     rs.getInt("users_id"),
                     rs.getDouble("total"),
                     rs.getString("created_at"),

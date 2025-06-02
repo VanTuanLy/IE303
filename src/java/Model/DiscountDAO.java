@@ -24,7 +24,7 @@ public class DiscountDAO {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             list.add(new Discount(
-                    rs.getInt("id"),
+                    rs.getInt("discount_id"),
                     rs.getString("dis_name"),
                     rs.getString("disc_desc"),
                     rs.getDouble("discount_percent"),
@@ -58,7 +58,7 @@ public class DiscountDAO {
     
     public Discount getDiscountById(int id) throws Exception {
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM discount WHERE id = ?";
+        String sql = "SELECT * FROM discount WHERE discount_id = ?";
         
         PreparedStatement ps = conn.prepareStatement(sql);
         
@@ -68,7 +68,7 @@ public class DiscountDAO {
         
         if(rs.next()){
             Discount discount = new Discount(
-                    rs.getInt("id"),
+                    rs.getInt("discount_id"),
                     rs.getString("dis_name"),
                     rs.getString("disc_desc"),
                     rs.getDouble("discount_percent"),
@@ -91,7 +91,7 @@ public class DiscountDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "DELETE FROM discount where id = ?";
+            String sql = "DELETE FROM discount where discount_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
@@ -110,7 +110,7 @@ public class DiscountDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update discount set dis_name=?, disc_desc=?, discount_percent=?, created_at=?, modified_at=? where id=?";
+            String sql = "update discount set dis_name=?, disc_desc=?, discount_percent=?, created_at=?, modified_at=? where discount_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setString(1, dis.getDisc_name());
@@ -134,7 +134,7 @@ public class DiscountDAO {
         List<Discount> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
 
-        List<String> allowedSortBy = List.of("id", "dis_name", "disc_desc", "discount_percent", "created_at", "modified_at");
+        List<String> allowedSortBy = List.of("discount_id", "dis_name", "disc_desc", "discount_percent", "created_at", "modified_at");
         List<String> allowedOrder = List.of("asc", "desc");
 
         if (!allowedSortBy.contains(sortBy.toLowerCase())) {
@@ -150,7 +150,7 @@ public class DiscountDAO {
 
         while (rs.next()) {
             list.add(new Discount(
-                    rs.getInt("id"),
+                    rs.getInt("discount_id"),
                     rs.getString("dis_name"),
                     rs.getString("disc_desc"),
                     rs.getDouble("discount_percent"),

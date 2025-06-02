@@ -24,7 +24,7 @@ public class Cart_itemDAO {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             list.add(new Cart_item(
-                    rs.getInt("id"),
+                    rs.getInt("cart_item_id"),
                     rs.getInt("sessions_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
@@ -68,7 +68,7 @@ public class Cart_itemDAO {
         
         if(rs.next()){
             Cart_item cart = new Cart_item(
-                    rs.getInt("id"),
+                    rs.getInt("cart_item_id"),
                     rs.getInt("sessions_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
@@ -100,7 +100,7 @@ public class Cart_itemDAO {
         
         if(rs.next()){
             Cart_item cart = new Cart_item(
-                    rs.getInt("id"),
+                    rs.getInt("cart_item_id"),
                     rs.getInt("sessions_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
@@ -132,7 +132,7 @@ public class Cart_itemDAO {
         
         while(rs.next()){
             cart.add( new Cart_item(
-                    rs.getInt("id"),
+                    rs.getInt("cart_item_id"),
                     rs.getInt("sessions_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
@@ -165,7 +165,7 @@ public class Cart_itemDAO {
         total = total - (product.getPrice()-product.getPrice()*discountPercent/100)*quantity;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "DELETE FROM cart_item where id = ?";
+            String sql = "DELETE FROM cart_item where cart_item_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             
@@ -220,7 +220,7 @@ public class Cart_itemDAO {
         int rowCount = 0;
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "update cart_item set sessions_id=?, product_id=?, quantity=?, created_at=?, modified_at=? where id=?";
+            String sql = "update cart_item set sessions_id=?, product_id=?, quantity=?, created_at=?, modified_at=? where cart_item_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             
             ps.setInt(1, item.getSessions_id());
@@ -244,7 +244,7 @@ public class Cart_itemDAO {
         List<Cart_item> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
 
-        List<String> allowedSortBy = List.of("id", "sessions_id", "product_id", "quantity", "created_at", "modified_at");
+        List<String> allowedSortBy = List.of("cart_item_id", "sessions_id", "product_id", "quantity", "created_at", "modified_at");
         List<String> allowedOrder = List.of("asc", "desc");
 
         if (!allowedSortBy.contains(sortBy.toLowerCase())) {
@@ -260,7 +260,7 @@ public class Cart_itemDAO {
 
         while (rs.next()) {
             list.add(new Cart_item(
-                    rs.getInt("id"),
+                    rs.getInt("cart_item_id"),
                     rs.getInt("sessions_id"),
                     rs.getInt("product_id"),
                     rs.getInt("quantity"),
@@ -298,7 +298,7 @@ public class Cart_itemDAO {
                     total = total - (product.getPrice() - product.getPrice()*discountPercent/100)*rs.getDouble("quantity");
                     // Đã tồn tại, update số lượng
                     Cart_item item = new Cart_item(
-                            rs.getInt("id"),
+                            rs.getInt("cart_item_id"),
                             rs.getInt("sessions_id"),
                             rs.getInt("product_id"),
                             quantity, // Cập nhật quantity mới
