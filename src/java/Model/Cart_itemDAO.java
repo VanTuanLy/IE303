@@ -130,7 +130,7 @@ public class Cart_itemDAO {
         
         ResultSet rs = ps.executeQuery();
         
-        if(rs.next()){
+        while(rs.next()){
             cart.add( new Cart_item(
                     rs.getInt("id"),
                     rs.getInt("sessions_id"),
@@ -139,16 +139,13 @@ public class Cart_itemDAO {
                     rs.getString("created_at"),
                     rs.getString("modified_at")
             ));
-            rs.close();
-            ps.close();
-            conn.close();
-            return cart;
         }
         
         rs.close();
         ps.close();
         conn.close();
-        return null;
+        return cart;
+ 
     }
     
     public int deleteCart_itemId(int id) throws  Exception{

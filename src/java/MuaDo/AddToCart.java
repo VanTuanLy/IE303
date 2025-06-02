@@ -4,9 +4,11 @@
  */
 package MuaDo;
 
+import Model.Cart_item;
 import Model.Cart_itemDAO;
 import Model.Shopping_Session;
 import Model.Shopping_SessionDAO;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,13 +33,21 @@ public class AddToCart extends CartAction {
     }
 
     @Override
-    public void execute(int productId) {
+    public List<Cart_item> showCart() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void execute() {
+    public void execute(int productId) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public void execute() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    
+    
 }
 

@@ -4,6 +4,9 @@
  */
 package MuaDo;
 
+import Model.Cart_item;
+import java.util.List;
+
 /**
  *
  * @author 84795
@@ -16,7 +19,8 @@ public abstract class CartAction {
         this.userId = userId;
     }
     
-    public abstract void execute(int productId, int quantity);
-    public abstract void execute(int productId);
+    public abstract void execute(int productId, int quantity) throws Exception;
+    public abstract void execute(int productId) throws Exception;
     public abstract void execute() throws Exception;
+    public abstract List<Cart_item> showCart();
 }

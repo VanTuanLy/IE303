@@ -8,6 +8,7 @@ import Model.Cart_item;
 import Model.Cart_itemDAO;
 import Model.Shopping_Session;
 import Model.Shopping_SessionDAO;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,23 +17,27 @@ import java.util.logging.Logger;
  *
  * @author 84795
  */
-public class RemoveFromCart extends CartAction {
-    public RemoveFromCart(int userId) {
+public class ViewCart extends CartAction{
+
+    public ViewCart(int userId) {
         super(userId);
     }
 
     @Override
-    public void execute(int productId, int quantity) {
+    public List<Cart_item> showCart() {
+        List<Cart_item> list = new ArrayList<>();
         try {
             Shopping_Session session = new Shopping_SessionDAO().getShopping_SessionByUserId(userId);
-            new Cart_itemDAO().deleteCart_itemId(session.getSession_id(),productId);
+            list.addAll(new Cart_itemDAO().getListCart_itemById(session.getSession_id()));
+            
         } catch (Exception ex) {
-            Logger.getLogger(RemoveFromCart.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ViewCart.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return list;
     }
 
     @Override
-    public List<Cart_item> showCart() {
+    public void execute(int productId, int quantity) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -45,7 +50,5 @@ public class RemoveFromCart extends CartAction {
     public void execute() throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
     
 }
-

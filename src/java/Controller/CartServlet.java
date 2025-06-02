@@ -12,14 +12,16 @@ import MuaDo.AddToCart;
 import MuaDo.CartAction;
 import MuaDo.CheckoutCart;
 import MuaDo.RemoveFromCart;
+import MuaDo.ViewCart;
 import java.io.IOException;
-import java.io.PrintWriter;
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +31,34 @@ import java.util.logging.Logger;
  */
 @WebServlet(name = "CartServlet", urlPatterns = {"/CartServlet"})
 public class CartServlet extends HttpServlet {
+    
+    private final Gson gson = new Gson();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain");
+        if(!AuthUtil.isUser(request)){
+            if(!AuthUtil.isAdmin(request)){
+                response.getWriter().write("Unauthorized");
+                return;
+            }
+        }
+        
+        String token = request.getHeader("Authorization");
+        String username = JwtUtil.getUsername(token); 
+        try {
+            User user = new UserDAO().getUserByUsername(username);
+            CartAction show = new ViewCart(user.getUser_id());
+            response.getWriter().write(gson.toJson(show.showCart()));
+        } catch (Exception ex) {
+            Logger.getLogger(CartServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

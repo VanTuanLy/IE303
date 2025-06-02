@@ -9,7 +9,6 @@ import Model.Cart_item;
 import Model.Cart_itemDAO;
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

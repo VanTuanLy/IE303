@@ -26,7 +26,7 @@ public class CheckoutCart extends CartAction {
     }
 
     @Override
-    public void execute() throws Exception{
+    public void execute(int productId, int quantity) throws Exception{
         
         Shopping_Session session = new Shopping_SessionDAO().getShopping_SessionByUserId(userId);
         if (session == null){
@@ -60,13 +60,20 @@ public class CheckoutCart extends CartAction {
     }
 
     @Override
-    public void execute(int productId) {
+    public List<Cart_item> showCart() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void execute(int productId, int quantity) {
+    public void execute(int productId) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public void execute() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
 }
 
